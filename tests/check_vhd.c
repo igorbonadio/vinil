@@ -41,7 +41,33 @@ START_TEST (test_vinil_checksum_vhd_footer) {
     sprintf(error_msg, "%s has an invalid checksum", vhd_files[i]);
     fail_unless(vinil_checksum_vhd_footer(&footer) == footer.checksum, error_msg);
     
-    close(fd);
+    fclose(fd);
+  }
+} END_TEST
+
+START_TEST (test_vinil_open) {
+  char *vhd_files[] = {"vhd_test_y.vhd", 
+                       "vhd_test_zero.vhd"};
+  
+  char vhd_path[256];
+  char error_msg[256];
+  
+  int i;
+  for (i = 0; i < 2; i++) {
+    sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
+    
+    VHD* vhd = vinil_vhd_open(vhd_path, "r");
+    
+    sprintf(error_msg, "Cannot open %s", vhd_files[i]);
+    fail_unless(vhd != NULL, error_msg);
+    
+    sprintf(error_msg, "Cannot open %s file descriptor", vhd_files[i]);
+    fail_unless(vhd->fd != NULL, error_msg);
+    
+    sprintf(error_msg, "Cannot open %s footer", vhd_files[i]);
+    fail_unless(vhd->footer != NULL, error_msg);
+    
+    vinil_vhd_close(vhd);
   }
 } END_TEST
 
@@ -49,6 +75,7 @@ Suite* func_suite(void) {
   Suite *s = suite_create ("vinil");
   TCase *tc_core = tcase_create ("VHD");
   tcase_add_test (tc_core, test_vinil_checksum_vhd_footer);
+  tcase_add_test (tc_core, test_vinil_open);
   suite_add_tcase (s, tc_core);
   return s;
 }

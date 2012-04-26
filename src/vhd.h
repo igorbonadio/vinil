@@ -7,6 +7,7 @@
 #ifndef VINIL_VHD_H_
 #define VINIL_VHD_H_
 
+#include <stdio.h>
 #include <stdint.h>
 #include <uuid/uuid.h>
 
@@ -34,6 +35,12 @@ typedef struct {
   char reserved[427];
 } VHDFooter;
 
+/** @brief Represents a virtual hard disk file */
+typedef struct {
+  FILE* fd;
+  VHDFooter* footer;
+} VHD;
+
 /** @brief  Calculates VDH Footer's checksum
  *
  *  @param    vhd_footer      VHD Footer
@@ -47,5 +54,22 @@ int vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
  *  @param    vhd_footer      VHD Footer
  */
 void vinil_bswap_vhd_footer(VHDFooter* vhd_footer);
+
+/** @brief  Opens a VHD file
+ *
+ *  @param    filename      C string containing the name of the file to be opened.
+ *
+ *  @param    mode          C string containing a file access mode like the C function fopen.
+ *
+ *  @return   If the operation was succesfully opened this function will return a pointer to VHD object. 
+ *            Otherwise, a null pointer is returned.
+ */
+VHD* vinil_vhd_open(const char* filename, const char* mode);
+
+/** @brief  Closes and destroy the VHD object
+ *
+ *  @param    vhd      VHD object
+ */
+void vinil_vhd_close(VHD* vhd);
 
 #endif

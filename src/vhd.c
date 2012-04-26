@@ -5,6 +5,8 @@
 
 #include "vhd.h"
 
+#include <stdlib.h>
+
 #define htonll(value) ((u64)(htonl((u32)(value & 0xFFFFFFFFLL))) << 32) | htonl((u32)(value >> 32))
 
 int vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
@@ -36,4 +38,57 @@ void vinil_bswap_vhd_footer(VHDFooter* vhd_footer) {
 	vhd_footer->disk_geometry = htonl(vhd_footer->disk_geometry);
 	vhd_footer->disk_type = htonl(vhd_footer->disk_type);
   vhd_footer->checksum = htonl(vhd_footer->checksum);
+}
+
+VHD* vinil_vhd_open(const char* filename, const char* mode) {
+  int error;
+  
+  VHD* vhd = (VHD*)malloc(sizeof(VHD));
+  if (vhd == NULL)
+    return NULL;
+  
+  vhd->fd = fopen(filename, mode);
+  if (vhd->fd == NULL) {
+    vinil_vhd_close(vhd);
+    return NULL;
+  }
+  
+  vhd->footer = (VHDFooter*)malloc(sizeof(VHDFooter));
+  if (vhd->footer == NULL) {
+    vinil_vhd_close(vhd);
+    return NULL;
+  }
+  
+  error = fseek(vhd->fd, 0, SEEK_END);
+  if (error) {
+    vinil_vhd_close(vhd);
+    return NULL;
+  }
+  
+  error = fseek(vhd->fd, ftell(vhd->fd) - sizeof(VHDFooter), SEEK_SET);
+  if (error) {
+    vinil_vhd_close(vhd);
+    return NULL;
+  }
+  
+  int b = fread(vhd->footer, sizeof(char), sizeof(VHDFooter), vhd->fd);
+  if (b != sizeof(VHDFooter)) {
+    vinil_vhd_close(vhd);
+    return NULL;
+  }
+  
+  vinil_bswap_vhd_footer(vhd->footer);
+  
+  if (vinil_checksum_vhd_footer(vhd->footer) != vhd->footer->checksum) {
+    vinil_vhd_close(vhd);
+    return NULL;
+  }
+  
+  return vhd;
+}
+
+void vinil_vhd_close(VHD* vhd) {
+  fclose(vhd->fd);
+  free(vhd->footer);
+  free(vhd);
 }
