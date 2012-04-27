@@ -21,25 +21,12 @@ START_TEST (test_vinil_checksum_vhd_footer) {
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(fd != NULL, error_msg);
 
-    VHDFooter footer;
-    
-    int error;
-    error = fseek(fd, 0, SEEK_END);
-    sprintf(error_msg, "Cannot set the position to SEEK_END in %s", vhd_files[i]);
-    fail_unless(error == 0, error_msg);
-    
-    error = fseek(fd, ftell(fd) - sizeof(VHDFooter), SEEK_SET);
-    sprintf(error_msg, "Cannot set the position to (SEEK_END - 512) in %s", vhd_files[i]);
-    fail_unless(error == 0, error_msg);
-    
-    int b = fread(&footer, sizeof(char), sizeof(VHDFooter), fd);
-    sprintf(error_msg, "Cannot read VHD Footer of %s", vhd_files[i]);
-    fail_unless(b == 512, error_msg);
-    
-    vinil_vhd_footer_to_little_endian(&footer);
+    VHDFooter* footer = vinil_vhd_footer_create(fd);
     
     sprintf(error_msg, "%s has an invalid checksum", vhd_files[i]);
-    fail_unless(vinil_checksum_vhd_footer(&footer) == footer.checksum, error_msg);
+    fail_unless(vinil_checksum_vhd_footer(footer) == footer->checksum, error_msg);
+    
+    vinil_vhd_footer_destroy(footer);
     
     fclose(fd);
   }

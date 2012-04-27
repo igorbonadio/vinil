@@ -53,31 +53,11 @@ VHD* vinil_vhd_open(const char* filename) {
     return NULL;
   }
   
-  vhd->footer = (VHDFooter*)malloc(sizeof(VHDFooter));
+  vhd->footer = vinil_vhd_footer_create(vhd->fd);
   if (vhd->footer == NULL) {
-    vinil_vhd_close(vhd);
+    vinil_vhd_close(NULL);
     return NULL;
   }
-  
-  error = fseek(vhd->fd, 0, SEEK_END);
-  if (error) {
-    vinil_vhd_close(vhd);
-    return NULL;
-  }
-  
-  error = fseek(vhd->fd, ftell(vhd->fd) - sizeof(VHDFooter), SEEK_SET);
-  if (error) {
-    vinil_vhd_close(vhd);
-    return NULL;
-  }
-  
-  int b = fread(vhd->footer, sizeof(char), sizeof(VHDFooter), vhd->fd);
-  if (b != sizeof(VHDFooter)) {
-    vinil_vhd_close(vhd);
-    return NULL;
-  }
-  
-  vinil_vhd_footer_to_little_endian(vhd->footer);
   
   if (vinil_checksum_vhd_footer(vhd->footer) != vhd->footer->checksum) {
     vinil_vhd_close(vhd);
@@ -89,6 +69,42 @@ VHD* vinil_vhd_open(const char* filename) {
 
 void vinil_vhd_close(VHD* vhd) {
   fclose(vhd->fd);
-  free(vhd->footer);
+  vinil_vhd_footer_destroy(vhd->footer);
   free(vhd);
+}
+
+VHDFooter* vinil_vhd_footer_create(FILE* fd) {
+  int error;
+  
+  VHDFooter* footer = (VHDFooter*)malloc(sizeof(VHDFooter));
+  if (footer == NULL) {
+    vinil_vhd_footer_destroy(footer);
+    return NULL;
+  }
+  
+  error = fseek(fd, 0, SEEK_END);
+  if (error) {
+    vinil_vhd_footer_destroy(footer);
+    return NULL;
+  }
+  
+  error = fseek(fd, ftell(fd) - sizeof(VHDFooter), SEEK_SET);
+  if (error) {
+    vinil_vhd_footer_destroy(footer);
+    return NULL;
+  }
+  
+  int b = fread(footer, sizeof(char), sizeof(VHDFooter), fd);
+  if (b != sizeof(VHDFooter)) {
+    vinil_vhd_footer_destroy(footer);
+    return NULL;
+  }
+  
+  vinil_vhd_footer_to_little_endian(footer);
+  
+  return footer;
+}
+
+void vinil_vhd_footer_destroy(VHDFooter* vhd_footer) {
+  free(vhd_footer);
 }

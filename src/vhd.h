@@ -41,6 +41,9 @@ typedef struct {
   VHDFooter* footer;
 } VHD;
 
+VHDFooter* vinil_vhd_footer_create(FILE* fd);
+void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
+
 /** @brief  Calculates VDH Footer's checksum
  *
  *  @param    vhd_footer      VHD Footer
