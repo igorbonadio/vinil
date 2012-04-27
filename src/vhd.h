@@ -59,12 +59,10 @@ void vinil_bswap_vhd_footer(VHDFooter* vhd_footer);
  *
  *  @param    filename      C string containing the name of the file to be opened.
  *
- *  @param    mode          C string containing a file access mode like the C function fopen.
- *
  *  @return   If the operation was succesfully opened this function will return a pointer to VHD object. 
  *            Otherwise, a null pointer is returned.
  */
-VHD* vinil_vhd_open(const char* filename, const char* mode);
+VHD* vinil_vhd_open(const char* filename);
 
 /** @brief  Closes and destroy the VHD object
  *

@@ -56,7 +56,7 @@ START_TEST (test_vinil_open) {
   for (i = 0; i < 2; i++) {
     sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
     
-    VHD* vhd = vinil_vhd_open(vhd_path, "r");
+    VHD* vhd = vinil_vhd_open(vhd_path);
     
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);

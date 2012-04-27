@@ -40,14 +40,14 @@ void vinil_bswap_vhd_footer(VHDFooter* vhd_footer) {
   vhd_footer->checksum = htonl(vhd_footer->checksum);
 }
 
-VHD* vinil_vhd_open(const char* filename, const char* mode) {
+VHD* vinil_vhd_open(const char* filename) {
   int error;
   
   VHD* vhd = (VHD*)malloc(sizeof(VHD));
   if (vhd == NULL)
     return NULL;
   
-  vhd->fd = fopen(filename, mode);
+  vhd->fd = fopen(filename, "rb+");
   if (vhd->fd == NULL) {
     vinil_vhd_close(vhd);
     return NULL;
