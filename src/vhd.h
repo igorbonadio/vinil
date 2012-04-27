@@ -53,7 +53,7 @@ int vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
  *
  *  @param    vhd_footer      VHD Footer
  */
-void vinil_bswap_vhd_footer(VHDFooter* vhd_footer);
+void vinil_vhd_footer_to_little_endian(VHDFooter* vhd_footer);
 
 /** @brief  Opens a VHD file
  *

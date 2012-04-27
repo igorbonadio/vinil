@@ -36,7 +36,7 @@ START_TEST (test_vinil_checksum_vhd_footer) {
     sprintf(error_msg, "Cannot read VHD Footer of %s", vhd_files[i]);
     fail_unless(b == 512, error_msg);
     
-    vinil_bswap_vhd_footer(&footer);
+    vinil_vhd_footer_to_little_endian(&footer);
     
     sprintf(error_msg, "%s has an invalid checksum", vhd_files[i]);
     fail_unless(vinil_checksum_vhd_footer(&footer) == footer.checksum, error_msg);

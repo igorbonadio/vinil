@@ -26,7 +26,7 @@ int vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
   return ~checksum;
 }
 
-void vinil_bswap_vhd_footer(VHDFooter* vhd_footer) {
+void vinil_vhd_footer_to_little_endian(VHDFooter* vhd_footer) {
   vhd_footer->features = htonl(vhd_footer->features);
 	vhd_footer->file_format_version = htonl(vhd_footer->file_format_version);
 	vhd_footer->data_offset = htonll(vhd_footer->data_offset);
@@ -77,7 +77,7 @@ VHD* vinil_vhd_open(const char* filename) {
     return NULL;
   }
   
-  vinil_bswap_vhd_footer(vhd->footer);
+  vinil_vhd_footer_to_little_endian(vhd->footer);
   
   if (vinil_checksum_vhd_footer(vhd->footer) != vhd->footer->checksum) {
     vinil_vhd_close(vhd);
