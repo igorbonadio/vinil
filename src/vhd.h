@@ -49,6 +49,10 @@ typedef struct {
  */
 VHDFooter* vinil_vhd_footer_create(FILE* fd);
 
+/** @brief  Destroys a VHDFooter object
+ *
+ *  @param    vhd_footer  a VHDFooter object to be destroyed
+ */
 void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
 
 /** @brief  Calculates VDH Footer's checksum
@@ -91,7 +95,7 @@ void vinil_vhd_close(VHD* vhd);
  */
 int vinil_vhd_read(VHD* vhd, void* buffer);
 
-/** @brief  Return the current sector number
+/** @brief  Returns the current sector number
  *
  *  @param    vhd       VHD object
  *
@@ -99,5 +103,7 @@ int vinil_vhd_read(VHD* vhd, void* buffer);
  *            If an error occurs, -1L is returned.
  */
 long vinil_vhd_tell(VHD* vhd);
+
+int vinil_vhd_seek(VHD* vhd, long offset, int origin);
 
 #endif

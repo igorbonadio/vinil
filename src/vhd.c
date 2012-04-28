@@ -127,3 +127,22 @@ int vinil_vhd_read(VHD* vhd, void* buffer) {
 long vinil_vhd_tell(VHD* vhd) {
   return ftell(vhd->fd)/512;
 }
+
+int vinil_vhd_seek(VHD* vhd, long offset, int origin) {
+  if (origin == SEEK_END) {
+    int error = 0;
+    
+    error = fseek(vhd->fd, 0, SEEK_END);
+    if (error) {
+      return 1;
+    }
+
+    error = fseek(vhd->fd, ftell(vhd->fd) - sizeof(VHDFooter), SEEK_SET);
+    if (error) {
+      return 1;
+    }
+    
+    return 0;
+  }
+  return fseek(vhd->fd, offset*512, origin);
+}
