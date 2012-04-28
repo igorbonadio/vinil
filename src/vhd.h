@@ -104,6 +104,33 @@ int vinil_vhd_read(VHD* vhd, void* buffer);
  */
 long vinil_vhd_tell(VHD* vhd);
 
+/** @brief  Sets the position indicator associated with the VHD object to a new
+ *          position defined by the number of sector indicated by offset to a 
+ *          reference position specified by origin.
+ *
+ *  @param    vhd       VHD object
+ *
+ *  @param    offset    number of sector to offset from origin
+ *
+ *  @param    origin    Default Positions defined by <cstdio>:
+ *                      <table border> 
+ *                      <tr> 
+ *                         <td> SEEK_SET </td> 
+ *                         <td> Beginning of file </td> 
+ *                      </tr> 
+ *                      <tr> 
+ *                         <td> SEEK_CUR </td> 
+ *                         <td> Current position of the file pointer </td> 
+ *                      </tr> 
+ *                      <tr> 
+ *                         <td> SEEK_END </td> 
+ *                         <td> End of file </td> 
+ *                      </tr>
+ *                      </table>
+ *
+ *  @return   On success, the function returns a zero value.
+ *            If an error occurs, it returns a nonzero value.
+ */
 int vinil_vhd_seek(VHD* vhd, long offset, int origin);
 
 #endif
