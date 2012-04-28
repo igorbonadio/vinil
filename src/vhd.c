@@ -115,13 +115,13 @@ void vinil_vhd_footer_destroy(VHDFooter* vhd_footer) {
   free(vhd_footer);
 }
 
-int vinil_vhd_read(VHD* vhd, void* buffer) {
+int vinil_vhd_read(VHD* vhd, void* buffer, int count) {
   if (ftell(vhd->fd) == vhd->footer->original_size)
     return 0;
   
-  int bytes = fread(buffer, sizeof(char), 512, vhd->fd);
+  int bytes = fread(buffer, sizeof(char), 512*count, vhd->fd);
   
-  return bytes == 512 ? 1 : 0;
+  return bytes == 512*count ? 1 : 0;
 }
 
 long vinil_vhd_tell(VHD* vhd) {

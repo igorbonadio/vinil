@@ -76,7 +76,7 @@ START_TEST (test_vinil_read) {
     
     char sector[512];
     int count = 0;
-    while (vinil_vhd_read(vhd, sector))
+    while (vinil_vhd_read(vhd, sector, 1))
       count++;
     
     sprintf(error_msg, "Wrong number of sectors in %s", vhd_files[i]);
@@ -104,15 +104,15 @@ START_TEST (test_vinil_tell) {
     
     char sector[512];
     int ok;
-    ok = vinil_vhd_read(vhd, sector);
+    ok = vinil_vhd_read(vhd, sector, 1);
     sprintf(error_msg, "Cannot read %s", vhd_files[i]);
     fail_unless(ok, error_msg);
     
-    ok = vinil_vhd_read(vhd, sector);
+    ok = vinil_vhd_read(vhd, sector, 1);
     sprintf(error_msg, "Cannot read %s", vhd_files[i]);
     fail_unless(ok, error_msg);
     
-    ok = vinil_vhd_read(vhd, sector);
+    ok = vinil_vhd_read(vhd, sector, 1);
     sprintf(error_msg, "Cannot read %s", vhd_files[i]);
     fail_unless(ok, error_msg);
     

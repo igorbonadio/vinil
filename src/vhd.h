@@ -88,12 +88,14 @@ void vinil_vhd_close(VHD* vhd);
  *
  *  @param    vhd       VHD object
  *
- *  @param    buffer    a 512 bytes buffer
+ *  @param    buffer    a (512*count) bytes buffer
+ *
+ *  @param    count     number of sectors to read
  *
  *  @return   If the operation was succesfully executed this function will return 1.
  *            Otherwise, 0 will be returned.
  */
-int vinil_vhd_read(VHD* vhd, void* buffer);
+int vinil_vhd_read(VHD* vhd, void* buffer, int count);
 
 /** @brief  Returns the current sector number
  *
