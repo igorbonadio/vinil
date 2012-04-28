@@ -80,4 +80,15 @@ VHD* vinil_vhd_open(const char* filename);
  */
 void vinil_vhd_close(VHD* vhd);
 
+/** @brief  Reads a sector from the VHD object
+ *
+ *  @param    vhd       VHD object
+ *
+ *  @param    buffer    a 512 bytes buffer
+ *
+ *  @return   If the operation was succesfully executed this function will return 512.
+ *            Otherwise, 0 will be returned.
+ */
+int vinil_vhd_read(VHD* vhd, void* buffer);
+
 #endif

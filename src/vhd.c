@@ -55,11 +55,17 @@ VHD* vinil_vhd_open(const char* filename) {
   
   vhd->footer = vinil_vhd_footer_create(vhd->fd);
   if (vhd->footer == NULL) {
-    vinil_vhd_close(NULL);
+    vinil_vhd_close(vhd);
     return NULL;
   }
   
   if (vinil_checksum_vhd_footer(vhd->footer) != vhd->footer->checksum) {
+    vinil_vhd_close(vhd);
+    return NULL;
+  }
+  
+  error = fseek(vhd->fd, 0, SEEK_SET);
+  if (error) {
     vinil_vhd_close(vhd);
     return NULL;
   }
@@ -107,4 +113,11 @@ VHDFooter* vinil_vhd_footer_create(FILE* fd) {
 
 void vinil_vhd_footer_destroy(VHDFooter* vhd_footer) {
   free(vhd_footer);
+}
+
+int vinil_vhd_read(VHD* vhd, void* buffer) {
+  if (ftell(vhd->fd) == vhd->footer->original_size)
+    return 0;
+  
+  return fread(buffer, sizeof(char), 512, vhd->fd);
 }
