@@ -91,4 +91,13 @@ void vinil_vhd_close(VHD* vhd);
  */
 int vinil_vhd_read(VHD* vhd, void* buffer);
 
+/** @brief  Return the current sector number
+ *
+ *  @param    vhd       VHD object
+ *
+ *  @return   On success, the current sector number is returned. 
+ *            If an error occurs, -1L is returned.
+ */
+long vinil_vhd_tell(VHD* vhd);
+
 #endif

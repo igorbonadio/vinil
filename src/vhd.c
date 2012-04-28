@@ -123,3 +123,7 @@ int vinil_vhd_read(VHD* vhd, void* buffer) {
   
   return bytes == 512 ? 1 : 0;
 }
+
+long vinil_vhd_tell(VHD* vhd) {
+  return ftell(vhd->fd)/512;
+}
