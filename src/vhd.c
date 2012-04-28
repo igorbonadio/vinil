@@ -119,5 +119,7 @@ int vinil_vhd_read(VHD* vhd, void* buffer) {
   if (ftell(vhd->fd) == vhd->footer->original_size)
     return 0;
   
-  return fread(buffer, sizeof(char), 512, vhd->fd);
+  int bytes = fread(buffer, sizeof(char), 512, vhd->fd);
+  
+  return bytes == 512 ? 1 : 0;
 }

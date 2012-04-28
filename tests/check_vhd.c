@@ -77,7 +77,7 @@ START_TEST (test_vinil_read) {
     char sector[513];
     int bytes;
     int count = 0;
-    while ((bytes = vinil_vhd_read(vhd, sector)) == 512)
+    while (vinil_vhd_read(vhd, sector))
       count++;
     
     sprintf(error_msg, "Wrong number of sectors in %s", vhd_files[i]);
