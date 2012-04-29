@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
 
 #include <check.h>
 
@@ -172,6 +173,54 @@ START_TEST (test_vinil_seek) {
   }
 } END_TEST
 
+START_TEST (test_vinil_vhd_commit_structural_changes) {
+  char vhd_file[] = "new_vhd_file.vhd";
+  
+  char vhd_path[256];
+  sprintf(vhd_path, "../tests/data/%s", vhd_file);
+  
+  FILE* f = fopen(vhd_path, "r");
+  if (f) {
+    fclose(f);
+    remove(vhd_path);
+  }
+  
+  f = fopen(vhd_path, "r");
+  fail_unless(f == NULL, "new_vhd_file.vhd already exists");
+  
+  VHD* vhd = vinil_vhd_open(vhd_path);
+  fail_unless(vhd != NULL, "Cannot open new_vhd_file.vhd");
+  
+  memcpy(vhd->footer->cookie, "conectix", 9);
+  vhd->footer->features = 0;
+  vhd->footer->file_format_version = 0x00010000;
+  vhd->footer->data_offset = 0xFFFFFFFF;
+  struct timeval tv;
+  gettimeofday(&tv,NULL);
+  vhd->footer->timestamp = tv.tv_sec;
+  memcpy(vhd->footer->creator_application, "vnil", 4);
+  vhd->footer->creator_version = 0x00000001;
+  vhd->footer->creator_host_os = 0x4D616320;              // Mac OS X
+  vhd->footer->original_size = 4*1024*1024;               // 4MB
+  vhd->footer->current_size = 4*1024*1024;                // 4MB
+  //vhd->footer->disk_geometry = 0;
+  vhd->footer->disk_type = 2;                             // Fixed
+  uuid_generate(vhd->footer->uuid);
+  vhd->footer->saved_state = 0;
+  vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
+  
+  fail_unless(vinil_vhd_commit_structural_changes(vhd), "Cannot commit changes in new_vhd_file.vhd");
+  
+  vinil_vhd_close(vhd);
+  
+  // checking the new file...
+  VHD* vhd2 = vinil_vhd_open(vhd_path);
+  fail_unless(vhd2 != NULL, "Cannot open new_vhd_file.vhd");
+  fail_unless(vinil_checksum_vhd_footer(vhd2->footer) == vhd2->footer->checksum, "new_vhd_file.vhd has an invalid checksum");
+  vinil_vhd_close(vhd2);
+  
+} END_TEST
+
 Suite* func_suite(void) {
   Suite *s = suite_create ("vinil");
   TCase *tc_core = tcase_create ("VHD");
@@ -180,6 +229,7 @@ Suite* func_suite(void) {
   tcase_add_test (tc_core, test_vinil_read);
   tcase_add_test (tc_core, test_vinil_tell);
   tcase_add_test (tc_core, test_vinil_seek);
+  tcase_add_test (tc_core, test_vinil_vhd_commit_structural_changes);
   suite_add_tcase (s, tc_core);
   return s;
 }

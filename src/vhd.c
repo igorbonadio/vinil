@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #define htonll(value) ((u64)(htonl((u32)(value & 0xFFFFFFFFLL))) << 32) | htonl((u32)(value >> 32))
+#define ntohll(value) ((u64)(ntohl((u32)(value & 0xFFFFFFFFLL))) << 32) | ntohl((u32)(value >> 32))
 
 int vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
   unsigned char* buffer;
@@ -40,6 +41,20 @@ void vinil_vhd_footer_to_little_endian(VHDFooter* vhd_footer) {
   vhd_footer->checksum = htonl(vhd_footer->checksum);
 }
 
+void vinil_vhd_footer_to_big_endian(VHDFooter* vhd_footer) {
+  vhd_footer->features = ntohl(vhd_footer->features);
+	vhd_footer->file_format_version = ntohl(vhd_footer->file_format_version);
+	vhd_footer->data_offset = ntohll(vhd_footer->data_offset);
+	vhd_footer->timestamp = ntohl(vhd_footer->timestamp);
+	vhd_footer->creator_version = ntohl(vhd_footer->creator_version);
+	vhd_footer->creator_host_os = ntohl(vhd_footer->creator_host_os);
+	vhd_footer->original_size = ntohll(vhd_footer->original_size);
+	vhd_footer->current_size = ntohll(vhd_footer->current_size);
+	vhd_footer->disk_geometry = ntohl(vhd_footer->disk_geometry);
+	vhd_footer->disk_type = ntohl(vhd_footer->disk_type);
+  vhd_footer->checksum = ntohl(vhd_footer->checksum);
+}
+
 VHD* vinil_vhd_open(const char* filename) {
   int error;
   int file_exists = 0;
@@ -48,6 +63,12 @@ VHD* vinil_vhd_open(const char* filename) {
   if (f) {
     file_exists = 1;
     fclose(f);
+  } else {
+    f = fopen(filename, "w");
+    if (f)
+      fclose(f);
+    else
+      return NULL;
   }
   
   VHD* vhd = (VHD*)malloc(sizeof(VHD));
@@ -160,4 +181,23 @@ int vinil_vhd_seek(VHD* vhd, long offset, int origin) {
     return 0;
   }
   return fseek(vhd->fd, offset*512, origin);
+}
+
+int vinil_vhd_flush(VHD* vhd) {
+  return fflush(vhd->fd);
+}
+
+int vinil_vhd_commit_structural_changes(VHD* vhd) {
+  int error = fseek(vhd->fd, vhd->footer->current_size, SEEK_SET);
+  if (error) {
+    return 0;
+  }
+  
+  vinil_vhd_footer_to_big_endian(vhd->footer);
+  
+  int b = fwrite(vhd->footer, 1, sizeof(VHDFooter), vhd->fd);
+  if (b != sizeof(VHDFooter))
+    return 0;
+  
+  return 1;
 }

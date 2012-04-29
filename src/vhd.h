@@ -53,7 +53,7 @@ VHDFooter* vinil_vhd_footer_create();
  *
  *  @param    vhd_footer  a VHDFooter object that will contain vhd footer's information
  *
- *  @return   a new VHDFooter object
+ *  @return   Returns 1 if successful or 0 otherwise.
  */
 int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer);
 
@@ -76,6 +76,12 @@ int vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
  *  @param    vhd_footer      VHD Footer
  */
 void vinil_vhd_footer_to_little_endian(VHDFooter* vhd_footer);
+
+/** @brief  Function for byte order swapping
+ *
+ *  @param    vhd_footer      VHD Footer
+ */
+void vinil_vhd_footer_to_big_endian(VHDFooter* vhd_footer);
 
 /** @brief  Opens a VHD file
  *
@@ -142,5 +148,22 @@ long vinil_vhd_tell(VHD* vhd);
  *            If an error occurs, it returns a nonzero value.
  */
 int vinil_vhd_seek(VHD* vhd, long offset, int origin);
+
+/** @brief  It is like fflush C function.
+ *
+ *  @param    vhd       VHD object
+ *
+ *  @return   A zero value indicates success.
+ */
+int vinil_vhd_flush(VHD* vhd);
+
+/** @brief  If necessary it changes the virtual hard disk's size 
+ *          and write the VHDFooter struct at the end of file
+ *
+ *  @param    vhd       VHD object
+ *
+ *  @return   A zero value indicates success.
+ */
+int vinil_vhd_commit_structural_changes(VHD* vhd);
 
 #endif
