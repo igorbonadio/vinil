@@ -211,12 +211,22 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   
   fail_unless(vinil_vhd_commit_structural_changes(vhd), "Cannot commit changes in new_vhd_file.vhd");
   
+  unsigned char buffer[512];
+  int i;
+  for (i = 0; i < 512; i++)
+    buffer[i] = (unsigned char)i;
+  fail_unless(vinil_vhd_write(vhd, buffer, 1), "Cannot write 1 sector to new_vhd_file.vhd");
+  
+  unsigned char buffer2[1024];
+  for (i = 0; i < 1024; i++)
+    buffer2[i] = (unsigned char)i;
+  fail_unless(vinil_vhd_write(vhd, buffer2, 1), "Cannot write 2 sectors to new_vhd_file.vhd");
+  
   vinil_vhd_close(vhd);
   
   // checking the new file...
   VHD* vhd2 = vinil_vhd_open(vhd_path);
-  fail_unless(vhd2 != NULL, "Cannot open new_vhd_file.vhd");
-  fail_unless(vinil_checksum_vhd_footer(vhd2->footer) == vhd2->footer->checksum, "new_vhd_file.vhd has an invalid checksum");
+  fail_unless(vhd2 != NULL, "Cannot reopen new_vhd_file.vhd");
   vinil_vhd_close(vhd2);
   
 } END_TEST

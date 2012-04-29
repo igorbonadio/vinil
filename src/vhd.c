@@ -160,6 +160,15 @@ int vinil_vhd_read(VHD* vhd, void* buffer, int count) {
   return bytes == 512*count ? 1 : 0;
 }
 
+int vinil_vhd_write(VHD* vhd, void* buffer, int count) {
+  if (ftell(vhd->fd) == vhd->footer->original_size)
+    return 0;
+  
+  int bytes = fwrite(buffer, sizeof(char), 512*count, vhd->fd);
+  
+  return bytes == 512*count ? 1 : 0;
+}
+
 long vinil_vhd_tell(VHD* vhd) {
   return ftell(vhd->fd)/512;
 }
@@ -198,6 +207,11 @@ int vinil_vhd_commit_structural_changes(VHD* vhd) {
   int b = fwrite(vhd->footer, 1, sizeof(VHDFooter), vhd->fd);
   if (b != sizeof(VHDFooter))
     return 0;
+    
+  error = fseek(vhd->fd, 0, SEEK_SET);
+  if (error) {
+    return 0;
+  }
   
   return 1;
 }

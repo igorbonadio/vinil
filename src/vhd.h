@@ -111,6 +111,19 @@ void vinil_vhd_close(VHD* vhd);
  */
 int vinil_vhd_read(VHD* vhd, void* buffer, int count);
 
+/** @brief  Writes a sector to a virtual hard disk file
+ *
+ *  @param    vhd       VHD object
+ *
+ *  @param    buffer    a (512*count) bytes buffer
+ *
+ *  @param    count     number of sectors to write
+ *
+ *  @return   If the operation was succesfully executed this function will return 1.
+ *            Otherwise, 0 will be returned.
+ */
+int vinil_vhd_write(VHD* vhd, void* buffer, int count);
+
 /** @brief  Returns the current sector number
  *
  *  @param    vhd       VHD object
