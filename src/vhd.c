@@ -152,7 +152,7 @@ void vinil_vhd_footer_destroy(VHDFooter* vhd_footer) {
 }
 
 int vinil_vhd_read(VHD* vhd, void* buffer, int count) {
-  if (ftell(vhd->fd) == vhd->footer->original_size)
+  if (ftell(vhd->fd) > (vhd->footer->current_size - 512*count))
     return 0;
   
   int bytes = fread(buffer, sizeof(char), 512*count, vhd->fd);
@@ -161,7 +161,7 @@ int vinil_vhd_read(VHD* vhd, void* buffer, int count) {
 }
 
 int vinil_vhd_write(VHD* vhd, void* buffer, int count) {
-  if (ftell(vhd->fd) == vhd->footer->original_size)
+  if (ftell(vhd->fd) > (vhd->footer->current_size - 512*count))
     return 0;
   
   int bytes = fwrite(buffer, sizeof(char), 512*count, vhd->fd);
@@ -207,6 +207,8 @@ int vinil_vhd_commit_structural_changes(VHD* vhd) {
   int b = fwrite(vhd->footer, 1, sizeof(VHDFooter), vhd->fd);
   if (b != sizeof(VHDFooter))
     return 0;
+  
+  vinil_vhd_footer_to_little_endian(vhd->footer);
     
   error = fseek(vhd->fd, 0, SEEK_SET);
   if (error) {

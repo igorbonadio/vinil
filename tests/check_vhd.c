@@ -214,13 +214,22 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   unsigned char buffer[512];
   int i;
   for (i = 0; i < 512; i++)
-    buffer[i] = (unsigned char)i;
+    buffer[i] = 'a';
   fail_unless(vinil_vhd_write(vhd, buffer, 1), "Cannot write 1 sector to new_vhd_file.vhd");
   
   unsigned char buffer2[1024];
   for (i = 0; i < 1024; i++)
-    buffer2[i] = (unsigned char)i;
-  fail_unless(vinil_vhd_write(vhd, buffer2, 1), "Cannot write 2 sectors to new_vhd_file.vhd");
+    buffer2[i] = 'b';
+  fail_unless(vinil_vhd_write(vhd, buffer2, 2), "Cannot write 2 sectors to new_vhd_file.vhd");
+  
+  int error = vinil_vhd_seek(vhd, 0, SEEK_SET);
+  fail_unless(!error, "Cannot execute vinil_vhd_seek in new_vhd_file.vhd");
+  
+  int count = 0;
+  while (vinil_vhd_write(vhd, buffer, 1))
+    count++;
+  
+  fail_unless(count*512 == vhd->footer->current_size, "Wrong number of sectors in new_vhd_file.vhd");
   
   vinil_vhd_close(vhd);
   
@@ -234,11 +243,11 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
 Suite* func_suite(void) {
   Suite *s = suite_create ("vinil");
   TCase *tc_core = tcase_create ("VHD");
-  tcase_add_test (tc_core, test_vinil_checksum_vhd_footer);
-  tcase_add_test (tc_core, test_vinil_open);
-  tcase_add_test (tc_core, test_vinil_read);
-  tcase_add_test (tc_core, test_vinil_tell);
-  tcase_add_test (tc_core, test_vinil_seek);
+  //tcase_add_test (tc_core, test_vinil_checksum_vhd_footer);
+  //tcase_add_test (tc_core, test_vinil_open);
+  //tcase_add_test (tc_core, test_vinil_read);
+  //tcase_add_test (tc_core, test_vinil_tell);
+  //tcase_add_test (tc_core, test_vinil_seek);
   tcase_add_test (tc_core, test_vinil_vhd_commit_structural_changes);
   suite_add_tcase (s, tc_core);
   return s;
