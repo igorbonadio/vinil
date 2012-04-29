@@ -41,13 +41,21 @@ typedef struct {
   VHDFooter* footer;
 } VHD;
 
-/** @brief  Reads and creates a VHDFooter object
- *
- *  @param    fd      Virtual Hard Disk's File descriptor
+/** @brief  Creates a new VHDFooter object
  *
  *  @return   a new VHDFooter object
  */
-VHDFooter* vinil_vhd_footer_create(FILE* fd);
+VHDFooter* vinil_vhd_footer_create();
+
+/** @brief  Reads a VHD footer
+ *
+ *  @param    fd          a VHD file descriptor
+ *
+ *  @param    vhd_footer  a VHDFooter object that will contain vhd footer's information
+ *
+ *  @return   a new VHDFooter object
+ */
+int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer);
 
 /** @brief  Destroys a VHDFooter object
  *

@@ -21,7 +21,13 @@ START_TEST (test_vinil_checksum_vhd_footer) {
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(fd != NULL, error_msg);
 
-    VHDFooter* footer = vinil_vhd_footer_create(fd);
+    VHDFooter* footer = vinil_vhd_footer_create();
+    sprintf(error_msg, "Cannot create vhd_footer for %s", vhd_files[i]);
+    fail_unless(footer != NULL, error_msg);
+    
+    int ok = vinil_vhd_footer_read(fd, footer);
+    sprintf(error_msg, "Cannot read %s's footer", vhd_files[i]);
+    fail_unless(ok, error_msg);
     
     sprintf(error_msg, "%s has an invalid checksum", vhd_files[i]);
     fail_unless(vinil_checksum_vhd_footer(footer) == footer->checksum, error_msg);
