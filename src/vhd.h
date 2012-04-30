@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <uuid/uuid.h>
 
+#include "util.h"
+
 typedef uint32_t u32;
 typedef uint64_t u64;
 typedef uuid_t vhd_uuid;
@@ -53,7 +55,7 @@ VHDFooter* vinil_vhd_footer_create();
  *
  *  @param    vhd_footer  a VHDFooter object that will contain vhd footer's information
  *
- *  @return   Returns 1 if successful or 0 otherwise.
+ *  @return   Returns TRUE if successful or FALSE otherwise.
  */
 int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer);
 
@@ -106,8 +108,8 @@ void vinil_vhd_close(VHD* vhd);
  *
  *  @param    count     number of sectors to read
  *
- *  @return   If the operation was succesfully executed this function will return 1.
- *            Otherwise, 0 will be returned.
+ *  @return   If the operation was succesfully executed this function will return TRUE.
+ *            Otherwise, FALSE will be returned.
  */
 int vinil_vhd_read(VHD* vhd, void* buffer, int count);
 
@@ -119,8 +121,8 @@ int vinil_vhd_read(VHD* vhd, void* buffer, int count);
  *
  *  @param    count     number of sectors to write
  *
- *  @return   If the operation was succesfully executed this function will return 1.
- *            Otherwise, 0 will be returned.
+ *  @return   If the operation was succesfully executed this function will return TRUE.
+ *            Otherwise, FALSE will be returned.
  */
 int vinil_vhd_write(VHD* vhd, void* buffer, int count);
 
@@ -157,8 +159,8 @@ long vinil_vhd_tell(VHD* vhd);
  *                      </tr>
  *                      </table>
  *
- *  @return   On success, the function returns a zero value.
- *            If an error occurs, it returns a nonzero value.
+ *  @return   On success, the function returns TRUE.
+ *            If an error occurs, it returns FALSE.
  */
 int vinil_vhd_seek(VHD* vhd, long offset, int origin);
 
@@ -166,7 +168,8 @@ int vinil_vhd_seek(VHD* vhd, long offset, int origin);
  *
  *  @param    vhd       VHD object
  *
- *  @return   A zero value indicates success.
+ *  @return   On success, the function return TRUE.
+ *            If an error occurs, it return FALSE
  */
 int vinil_vhd_flush(VHD* vhd);
 
@@ -175,7 +178,8 @@ int vinil_vhd_flush(VHD* vhd);
  *
  *  @param    vhd       VHD object
  *
- *  @return   A zero value indicates success.
+ *  @return   On success, the function return TRUE.
+ *            If an error occurs, it return FALSE
  */
 int vinil_vhd_commit_structural_changes(VHD* vhd);
 

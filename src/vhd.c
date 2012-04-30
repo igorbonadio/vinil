@@ -120,19 +120,19 @@ int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer) {
   
   error = fseek(fd, 0, SEEK_END);
   if (error)
-    return 0;
+    return FALSE;
   
   error = fseek(fd, ftell(fd) - sizeof(VHDFooter), SEEK_SET);
   if (error)
-    return 0;
+    return FALSE;
   
   int b = fread(vhd_footer, sizeof(char), sizeof(VHDFooter), fd);
   if (b != sizeof(VHDFooter))
-    return 0;
+    return FALSE;
   
   vinil_vhd_footer_to_little_endian(vhd_footer);
   
-  return 1;
+  return TRUE;
 }
 
 VHDFooter* vinil_vhd_footer_create() {
@@ -153,20 +153,20 @@ void vinil_vhd_footer_destroy(VHDFooter* vhd_footer) {
 
 int vinil_vhd_read(VHD* vhd, void* buffer, int count) {
   if (ftell(vhd->fd) > (vhd->footer->current_size - 512*count))
-    return 0;
+    return FALSE;
   
   int bytes = fread(buffer, sizeof(char), 512*count, vhd->fd);
   
-  return bytes == 512*count ? 1 : 0;
+  return bytes == 512*count ? TRUE : FALSE;
 }
 
 int vinil_vhd_write(VHD* vhd, void* buffer, int count) {
   if (ftell(vhd->fd) > (vhd->footer->current_size - 512*count))
-    return 0;
+    return FALSE;
   
   int bytes = fwrite(buffer, sizeof(char), 512*count, vhd->fd);
   
-  return bytes == 512*count ? 1 : 0;
+  return bytes == 512*count ? TRUE : FALSE;
 }
 
 long vinil_vhd_tell(VHD* vhd) {
@@ -179,41 +179,41 @@ int vinil_vhd_seek(VHD* vhd, long offset, int origin) {
     
     error = fseek(vhd->fd, 0, SEEK_END);
     if (error) {
-      return 1;
+      return FALSE;
     }
 
     error = fseek(vhd->fd, ftell(vhd->fd) - sizeof(VHDFooter), SEEK_SET);
     if (error) {
-      return 1;
+      return FALSE;
     }
     
-    return 0;
-  }
-  return fseek(vhd->fd, offset*512, origin);
+    return TRUE;
+  }  
+  return fseek(vhd->fd, offset*512, origin) ? FALSE : TRUE;
 }
 
 int vinil_vhd_flush(VHD* vhd) {
-  return fflush(vhd->fd);
+  return fflush(vhd->fd) ? FALSE : TRUE;
 }
 
 int vinil_vhd_commit_structural_changes(VHD* vhd) {
   int error = fseek(vhd->fd, vhd->footer->current_size, SEEK_SET);
   if (error) {
-    return 0;
+    return FALSE;
   }
   
   vinil_vhd_footer_to_big_endian(vhd->footer);
   
   int b = fwrite(vhd->footer, 1, sizeof(VHDFooter), vhd->fd);
   if (b != sizeof(VHDFooter))
-    return 0;
+    return FALSE;
   
   vinil_vhd_footer_to_little_endian(vhd->footer);
     
   error = fseek(vhd->fd, 0, SEEK_SET);
   if (error) {
-    return 0;
+    return FALSE;
   }
   
-  return 1;
+  return TRUE;
 }

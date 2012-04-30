@@ -110,18 +110,14 @@ START_TEST (test_vinil_tell) {
     fail_unless(vhd != NULL, error_msg);
     
     char sector[512];
-    int ok;
-    ok = vinil_vhd_read(vhd, sector, 1);
     sprintf(error_msg, "Cannot read %s", vhd_files[i]);
-    fail_unless(ok, error_msg);
+    fail_unless(vinil_vhd_read(vhd, sector, 1), error_msg);
     
-    ok = vinil_vhd_read(vhd, sector, 1);
     sprintf(error_msg, "Cannot read %s", vhd_files[i]);
-    fail_unless(ok, error_msg);
+    fail_unless(vinil_vhd_read(vhd, sector, 1), error_msg);
     
-    ok = vinil_vhd_read(vhd, sector, 1);
     sprintf(error_msg, "Cannot read %s", vhd_files[i]);
-    fail_unless(ok, error_msg);
+    fail_unless(vinil_vhd_read(vhd, sector, 1), error_msg);
     
     sprintf(error_msg, "vinil_vhd_tell function returns a wrong sector number %s", vhd_files[i]);
     fail_unless(vinil_vhd_tell(vhd) == 3, error_msg);
@@ -139,8 +135,6 @@ START_TEST (test_vinil_seek) {
   
   int i;
   for (i = 0; i < 2; i++) {
-    int error;
-    
     sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
     
     VHD* vhd = vinil_vhd_open(vhd_path);
@@ -148,23 +142,20 @@ START_TEST (test_vinil_seek) {
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);
     
-    error = vinil_vhd_seek(vhd, 0, SEEK_END);
     sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
-    fail_unless(!error, error_msg);
+    fail_unless(vinil_vhd_seek(vhd, 0, SEEK_END), error_msg);
     
     sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
     fail_unless(vinil_vhd_tell(vhd) == vhd->footer->original_size/512, error_msg);
     
-    error = vinil_vhd_seek(vhd, vhd->footer->original_size/512 - 1, SEEK_SET);
     sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
-    fail_unless(!error, error_msg);
+    fail_unless(vinil_vhd_seek(vhd, vhd->footer->original_size/512 - 1, SEEK_SET), error_msg);
     
     sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
     fail_unless(vinil_vhd_tell(vhd) == vhd->footer->original_size/512 - 1, error_msg);
     
-    error = vinil_vhd_seek(vhd, 1, SEEK_CUR);
     sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
-    fail_unless(!error, error_msg);
+    fail_unless(vinil_vhd_seek(vhd, 1, SEEK_CUR), error_msg);
     
     sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
     fail_unless(vinil_vhd_tell(vhd) == vhd->footer->original_size/512, error_msg);
@@ -222,8 +213,7 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
     buffer2[i] = 'b';
   fail_unless(vinil_vhd_write(vhd, buffer2, 2), "Cannot write 2 sectors to new_vhd_file.vhd");
   
-  int error = vinil_vhd_seek(vhd, 0, SEEK_SET);
-  fail_unless(!error, "Cannot execute vinil_vhd_seek in new_vhd_file.vhd");
+  fail_unless(vinil_vhd_seek(vhd, 0, SEEK_SET), "Cannot execute vinil_vhd_seek in new_vhd_file.vhd");
   
   int count = 0;
   while (vinil_vhd_write(vhd, buffer, 1))
@@ -243,11 +233,11 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
 Suite* func_suite(void) {
   Suite *s = suite_create ("vinil");
   TCase *tc_core = tcase_create ("VHD");
-  //tcase_add_test (tc_core, test_vinil_checksum_vhd_footer);
-  //tcase_add_test (tc_core, test_vinil_open);
-  //tcase_add_test (tc_core, test_vinil_read);
-  //tcase_add_test (tc_core, test_vinil_tell);
-  //tcase_add_test (tc_core, test_vinil_seek);
+  tcase_add_test (tc_core, test_vinil_checksum_vhd_footer);
+  tcase_add_test (tc_core, test_vinil_open);
+  tcase_add_test (tc_core, test_vinil_read);
+  tcase_add_test (tc_core, test_vinil_tell);
+  tcase_add_test (tc_core, test_vinil_seek);
   tcase_add_test (tc_core, test_vinil_vhd_commit_structural_changes);
   suite_add_tcase (s, tc_core);
   return s;
