@@ -71,7 +71,7 @@ void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
  *
  *  @return   the checksum
  */
-int vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
+u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
 
 /** @brief  Function for byte order swapping
  *

@@ -10,7 +10,7 @@
 #define htonll(value) ((u64)(htonl((u32)(value & 0xFFFFFFFFLL))) << 32) | htonl((u32)(value >> 32))
 #define ntohll(value) ((u64)(ntohl((u32)(value & 0xFFFFFFFFLL))) << 32) | ntohl((u32)(value >> 32))
 
-int vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
+u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
   unsigned char* buffer;
   buffer = (unsigned char*)vhd_footer;
   
