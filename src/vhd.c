@@ -1,6 +1,7 @@
 /** 
- *  @file     vhd.c
- *  @author   Igor Bonadio
+ *  @file       vhd.c
+ *  @author     Igor Bonadio
+ *  @copyright  MIT License. See Copyright Notice in LICENSE.txt
  */
 
 #include "vhd.h"
