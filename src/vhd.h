@@ -73,6 +73,51 @@ void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
  */
 u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
 
+/** @brief  As described in VHD specification, this function calculates CHS
+ *
+ *  @param    size      Disk's size
+ *
+ *  @return   CHS
+ */
+u32 vinil_compute_chs(u64 size);
+
+/** @brief  CHS is composed by cylinders (2 bytes), tracks (1 byte),
+ *          and secotrs-per-track (1 byte)
+ *
+ *  @param    cylinders             number of cylinders
+ *
+ *  @param    heads                 number of heads
+ *
+ *  @param    sectors_per_track     number of sectors per track
+ *
+ *  @return   CHS encoded
+ */
+u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track);
+
+/** @brief  Gets the number of cylinders
+ *
+ *  @param    geometry      Encoded CHS
+ *
+ *  @return   number of cylinders
+ */
+u32 vinil_geometry_get_cylinders(u32 geometry);
+
+/** @brief  Gets the number of heads
+ *
+ *  @param    geometry      Encoded CHS
+ *
+ *  @return   number of heads
+ */
+u32 vinil_geometry_get_head(u32 geometry);
+
+/** @brief  Gets the number of sectors per track
+ *
+ *  @param    geometry      Encoded CHS
+ *
+ *  @return   number of sectors per track
+ */
+u32 vinil_geometry_get_sectors_per_track(u32 geometry);
+
 /** @brief  Function for byte order swapping
  *
  *  @param    vhd_footer      VHD Footer

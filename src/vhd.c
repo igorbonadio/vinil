@@ -27,6 +27,60 @@ u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
   return ~checksum;
 }
 
+u32 vinil_compute_chs(u64 size) {
+  uint32_t sectors, cylinders, heads, sectors_per_track, cylinder_times_head;
+
+	sectors = size/512;
+
+	if (sectors > 65535 * 16 * 255)
+		sectors = 65535 * 16 * 255;
+
+	if (sectors >= 65535 * 16 * 63) {
+		sectors_per_track   = 255;
+		cylinder_times_head   = sectors / sectors_per_track;
+		heads = 16;
+	} else {
+		sectors_per_track   = 17;
+		cylinder_times_head   = sectors / sectors_per_track;
+		heads = (cylinder_times_head + 1023) / 1024;
+
+		if (heads < 4)
+			heads = 4;
+
+		if (cylinder_times_head >= (heads * 1024) || heads > 16) {
+			sectors_per_track   = 31;
+			cylinder_times_head   = sectors / sectors_per_track;
+			heads = 16;
+		}
+
+		if (cylinder_times_head >= heads * 1024) {
+			sectors_per_track   = 63;
+			cylinder_times_head   = sectors / sectors_per_track;
+			heads = 16;
+		}
+	}
+
+	cylinders = cylinder_times_head / heads;
+
+	return vinil_geometry_encode(cylinders, heads, sectors_per_track);
+}
+
+u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track) {
+  return (cylinders << 16) | (heads << 8) | sectors_per_track;
+}
+
+u32 vinil_geometry_get_cylinders(u32 geometry) {
+  return (geometry >> 16) & 0xffff;
+}
+
+u32 vinil_geometry_get_head(u32 geometry) {
+  return (geometry >> 8)  & 0xff;
+}
+
+u32 vinil_geometry_get_sectors_per_track(u32 geometry) {
+  return geometry & 0xff;
+}
+
 void vinil_vhd_footer_to_little_endian(VHDFooter* vhd_footer) {
   vhd_footer->features = htonl(vhd_footer->features);
 	vhd_footer->file_format_version = htonl(vhd_footer->file_format_version);

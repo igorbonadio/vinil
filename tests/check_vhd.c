@@ -191,11 +191,11 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   vhd->footer->timestamp = tv.tv_sec;
   memcpy(vhd->footer->creator_application, "vnil", 4);
   vhd->footer->creator_version = 0x00000001;
-  vhd->footer->creator_host_os = 0x4D616320;              // Mac OS X
-  vhd->footer->original_size = 4*1024*1024;               // 4MB
-  vhd->footer->current_size = 4*1024*1024;                // 4MB
-  //vhd->footer->disk_geometry = 0;
-  vhd->footer->disk_type = 2;                             // Fixed
+  vhd->footer->creator_host_os = 0x4D616320;                    // Mac OS X
+  vhd->footer->original_size = 4*1024*1024;                     // 4MB
+  vhd->footer->current_size = 4*1024*1024;                      // 4MB
+  vhd->footer->disk_geometry = vinil_compute_chs(4*1024*1024);
+  vhd->footer->disk_type = 2;                                   // Fixed
   uuid_generate(vhd->footer->uuid);
   vhd->footer->saved_state = 0;
   vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
@@ -230,6 +230,29 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   
 } END_TEST
 
+START_TEST (test_vinil_geometry_encode) {
+  char *vhd_files[] = {"vhd_test_y.vhd", 
+                       "vhd_test_zero.vhd"};
+  
+  char vhd_path[256];
+  char error_msg[256];
+  
+  int i;
+  for (i = 0; i < 2; i++) {
+    sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
+    
+    VHD* vhd = vinil_vhd_open(vhd_path);
+    
+    sprintf(error_msg, "Cannot open %s", vhd_files[i]);
+    fail_unless(vhd != NULL, error_msg);
+    
+    sprintf(error_msg, "Invalid geometry of %s", vhd_files[i]);
+    fail_unless(vinil_compute_chs(vhd->footer->current_size) == vhd->footer->disk_geometry, error_msg);
+    
+    vinil_vhd_close(vhd);
+  }
+} END_TEST
+
 Suite* func_suite(void) {
   Suite *s = suite_create ("vinil");
   TCase *tc_core = tcase_create ("VHD");
@@ -239,6 +262,7 @@ Suite* func_suite(void) {
   tcase_add_test (tc_core, test_vinil_tell);
   tcase_add_test (tc_core, test_vinil_seek);
   tcase_add_test (tc_core, test_vinil_vhd_commit_structural_changes);
+  tcase_add_test (tc_core, test_vinil_geometry_encode);
   suite_add_tcase (s, tc_core);
   return s;
 }
