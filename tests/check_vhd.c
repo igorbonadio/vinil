@@ -87,7 +87,7 @@ START_TEST (test_vinil_read) {
       count++;
     
     sprintf(error_msg, "Wrong number of sectors in %s", vhd_files[i]);
-    fail_unless(count*512 == vhd->footer->original_size, error_msg);
+    fail_unless(count*512 == vhd->footer->current_size, error_msg);
     
     vinil_vhd_close(vhd);
   }
@@ -146,19 +146,19 @@ START_TEST (test_vinil_seek) {
     fail_unless(vinil_vhd_seek(vhd, 0, SEEK_END), error_msg);
     
     sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
-    fail_unless(vinil_vhd_tell(vhd) == vhd->footer->original_size/512, error_msg);
+    fail_unless(vinil_vhd_tell(vhd) == vhd->footer->current_size/512, error_msg);
     
     sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
-    fail_unless(vinil_vhd_seek(vhd, vhd->footer->original_size/512 - 1, SEEK_SET), error_msg);
+    fail_unless(vinil_vhd_seek(vhd, vhd->footer->current_size/512 - 1, SEEK_SET), error_msg);
     
     sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
-    fail_unless(vinil_vhd_tell(vhd) == vhd->footer->original_size/512 - 1, error_msg);
+    fail_unless(vinil_vhd_tell(vhd) == vhd->footer->current_size/512 - 1, error_msg);
     
     sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
     fail_unless(vinil_vhd_seek(vhd, 1, SEEK_CUR), error_msg);
     
     sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
-    fail_unless(vinil_vhd_tell(vhd) == vhd->footer->original_size/512, error_msg);
+    fail_unless(vinil_vhd_tell(vhd) == vhd->footer->current_size/512, error_msg);
     
     vinil_vhd_close(vhd);
   }
