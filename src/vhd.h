@@ -123,13 +123,8 @@ u32 vinil_geometry_get_sectors_per_track(u32 geometry);
  *
  *  @param    vhd_footer      VHD Footer
  */
-void vinil_vhd_footer_to_little_endian(VHDFooter* vhd_footer);
+void vinil_vhd_footer_byte_swap(VHDFooter* vhd_footer);
 
-/** @brief  Function for byte order swapping
- *
- *  @param    vhd_footer      VHD Footer
- */
-void vinil_vhd_footer_to_big_endian(VHDFooter* vhd_footer);
 
 /** @brief  Opens a VHD file
  *

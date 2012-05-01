@@ -31,39 +31,39 @@ u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
 u32 vinil_compute_chs(u64 size) {
   uint32_t sectors, cylinders, heads, sectors_per_track, cylinder_times_head;
 
-	sectors = size/512;
+  sectors = size/512;
 
-	if (sectors > 65535 * 16 * 255)
-		sectors = 65535 * 16 * 255;
+  if (sectors > 65535 * 16 * 255)
+    sectors = 65535 * 16 * 255;
 
-	if (sectors >= 65535 * 16 * 63) {
-		sectors_per_track   = 255;
-		cylinder_times_head   = sectors / sectors_per_track;
-		heads = 16;
-	} else {
-		sectors_per_track   = 17;
-		cylinder_times_head   = sectors / sectors_per_track;
-		heads = (cylinder_times_head + 1023) / 1024;
+  if (sectors >= 65535 * 16 * 63) {
+    sectors_per_track   = 255;
+    cylinder_times_head   = sectors / sectors_per_track;
+    heads = 16;
+  } else {
+    sectors_per_track   = 17;
+    cylinder_times_head   = sectors / sectors_per_track;
+    heads = (cylinder_times_head + 1023) / 1024;
 
-		if (heads < 4)
-			heads = 4;
+    if (heads < 4)
+      heads = 4;
 
-		if (cylinder_times_head >= (heads * 1024) || heads > 16) {
-			sectors_per_track   = 31;
-			cylinder_times_head   = sectors / sectors_per_track;
-			heads = 16;
-		}
+    if (cylinder_times_head >= (heads * 1024) || heads > 16) {
+      sectors_per_track   = 31;
+      cylinder_times_head   = sectors / sectors_per_track;
+      heads = 16;
+    }
 
-		if (cylinder_times_head >= heads * 1024) {
-			sectors_per_track   = 63;
-			cylinder_times_head   = sectors / sectors_per_track;
-			heads = 16;
-		}
-	}
+    if (cylinder_times_head >= heads * 1024) {
+      sectors_per_track   = 63;
+      cylinder_times_head   = sectors / sectors_per_track;
+      heads = 16;
+    }
+  }
 
-	cylinders = cylinder_times_head / heads;
+  cylinders = cylinder_times_head / heads;
 
-	return vinil_geometry_encode(cylinders, heads, sectors_per_track);
+  return vinil_geometry_encode(cylinders, heads, sectors_per_track);
 }
 
 u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track) {
@@ -82,32 +82,38 @@ u32 vinil_geometry_get_sectors_per_track(u32 geometry) {
   return geometry & 0xff;
 }
 
-void vinil_vhd_footer_to_little_endian(VHDFooter* vhd_footer) {
-  vhd_footer->features = htonl(vhd_footer->features);
-	vhd_footer->file_format_version = htonl(vhd_footer->file_format_version);
-	vhd_footer->data_offset = htonll(vhd_footer->data_offset);
-	vhd_footer->timestamp = htonl(vhd_footer->timestamp);
-	vhd_footer->creator_version = htonl(vhd_footer->creator_version);
-	vhd_footer->creator_host_os = htonl(vhd_footer->creator_host_os);
-	vhd_footer->original_size = htonll(vhd_footer->original_size);
-	vhd_footer->current_size = htonll(vhd_footer->current_size);
-	vhd_footer->disk_geometry = htonl(vhd_footer->disk_geometry);
-	vhd_footer->disk_type = htonl(vhd_footer->disk_type);
-  vhd_footer->checksum = htonl(vhd_footer->checksum);
+static inline u32 byte_swap_32(u32 x)
+{
+    return
+    ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) |
+     (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24));
 }
 
-void vinil_vhd_footer_to_big_endian(VHDFooter* vhd_footer) {
-  vhd_footer->features = ntohl(vhd_footer->features);
-	vhd_footer->file_format_version = ntohl(vhd_footer->file_format_version);
-	vhd_footer->data_offset = ntohll(vhd_footer->data_offset);
-	vhd_footer->timestamp = ntohl(vhd_footer->timestamp);
-	vhd_footer->creator_version = ntohl(vhd_footer->creator_version);
-	vhd_footer->creator_host_os = ntohl(vhd_footer->creator_host_os);
-	vhd_footer->original_size = ntohll(vhd_footer->original_size);
-	vhd_footer->current_size = ntohll(vhd_footer->current_size);
-	vhd_footer->disk_geometry = ntohl(vhd_footer->disk_geometry);
-	vhd_footer->disk_type = ntohl(vhd_footer->disk_type);
-  vhd_footer->checksum = ntohl(vhd_footer->checksum);
+static inline u64 byte_swap_64(u64 x)
+{
+    return
+    ((((x) & 0xff00000000000000ULL) >> 56) |
+     (((x) & 0x00ff000000000000ULL) >> 40) |
+     (((x) & 0x0000ff0000000000ULL) >> 24) |
+     (((x) & 0x000000ff00000000ULL) >>  8) |
+     (((x) & 0x00000000ff000000ULL) <<  8) |
+     (((x) & 0x0000000000ff0000ULL) << 24) |
+     (((x) & 0x000000000000ff00ULL) << 40) |
+     (((x) & 0x00000000000000ffULL) << 56));
+}
+
+void vinil_vhd_footer_byte_swap(VHDFooter* vhd_footer) {
+  vhd_footer->features = byte_swap_32(vhd_footer->features);
+  vhd_footer->file_format_version = byte_swap_32(vhd_footer->file_format_version);
+  vhd_footer->data_offset = byte_swap_64(vhd_footer->data_offset);
+  vhd_footer->timestamp = byte_swap_32(vhd_footer->timestamp);
+  vhd_footer->creator_version = byte_swap_32(vhd_footer->creator_version);
+  vhd_footer->creator_host_os = byte_swap_32(vhd_footer->creator_host_os);
+  vhd_footer->original_size = byte_swap_64(vhd_footer->original_size);
+  vhd_footer->current_size = byte_swap_64(vhd_footer->current_size);
+  vhd_footer->disk_geometry = byte_swap_32(vhd_footer->disk_geometry);
+  vhd_footer->disk_type = byte_swap_32(vhd_footer->disk_type);
+  vhd_footer->checksum = byte_swap_32(vhd_footer->checksum);
 }
 
 VHD* vinil_vhd_open(const char* filename) {
@@ -185,7 +191,7 @@ int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer) {
   if (b != sizeof(VHDFooter))
     return FALSE;
   
-  vinil_vhd_footer_to_little_endian(vhd_footer);
+  vinil_vhd_footer_byte_swap(vhd_footer);
   
   return TRUE;
 }
@@ -257,13 +263,13 @@ int vinil_vhd_commit_structural_changes(VHD* vhd) {
     return FALSE;
   }
   
-  vinil_vhd_footer_to_big_endian(vhd->footer);
+  vinil_vhd_footer_byte_swap(vhd->footer);
   
   int b = fwrite(vhd->footer, 1, sizeof(VHDFooter), vhd->fd);
   if (b != sizeof(VHDFooter))
     return FALSE;
   
-  vinil_vhd_footer_to_little_endian(vhd->footer);
+  vinil_vhd_footer_byte_swap(vhd->footer);
     
   error = fseek(vhd->fd, 0, SEEK_SET);
   if (error) {
