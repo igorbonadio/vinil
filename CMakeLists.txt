@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.6)
 
 project(vinil)
 
+IF(MSVC)
+  ADD_DEFINITIONS("/TP")
+ENDIF(MSVC)
+
 add_subdirectory(src)
 add_subdirectory(tests)
 

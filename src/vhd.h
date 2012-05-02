@@ -10,7 +10,12 @@
 
 #include <stdio.h>
 #include <stdint.h>
+
+#ifdef _MSC_VER
+#include <windows.h>
+#else
 #include <uuid/uuid.h>
+#endif
 
 #include "util.h"
 
