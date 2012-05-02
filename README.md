@@ -6,7 +6,7 @@ Vinil is a C library for creating, reading and writing virtual hard disks. At th
 It works on...
 --------------
 
-- MacOS X
+- Mac OS X
 - Linux
 
 Development Environment
