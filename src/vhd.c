@@ -8,9 +8,6 @@
 
 #include <stdlib.h>
 
-#define htonll(value) ((u64)(htonl((u32)(value & 0xFFFFFFFFLL))) << 32) | htonl((u32)(value >> 32))
-#define ntohll(value) ((u64)(ntohl((u32)(value & 0xFFFFFFFFLL))) << 32) | ntohl((u32)(value >> 32))
-
 u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
   unsigned char* buffer;
   buffer = (unsigned char*)vhd_footer;
@@ -29,7 +26,7 @@ u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
 }
 
 u32 vinil_compute_chs(u64 size) {
-  uint32_t sectors, cylinders, heads, sectors_per_track, cylinder_times_head;
+  u32 sectors, cylinders, heads, sectors_per_track, cylinder_times_head;
 
   sectors = size/512;
 
