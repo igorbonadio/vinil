@@ -1,6 +1,6 @@
 /** 
- *  @file	    util.h
- *  @brief    Some comuns defines and functions are defined here
+ *  @file     util.h
+ *  @brief    Some common defines and functions are defined here
  *  @author   Igor Bonadio
  */
 
