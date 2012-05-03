@@ -53,7 +53,7 @@ typedef struct {
  *
  *  @return   a new VHDFooter object
  */
-VHDFooter* vinil_vhd_footer_create();
+VINILAPI VHDFooter* vinil_vhd_footer_create();
 
 /** @brief  Reads a VHD footer
  *
@@ -63,13 +63,13 @@ VHDFooter* vinil_vhd_footer_create();
  *
  *  @return   Returns TRUE if successful or FALSE otherwise.
  */
-int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer);
+VINILAPI int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer);
 
 /** @brief  Destroys a VHDFooter object
  *
  *  @param    vhd_footer  a VHDFooter object to be destroyed
  */
-void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
+VINILAPI void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
 
 /** @brief  Calculates VDH Footer's checksum
  *
@@ -77,7 +77,7 @@ void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
  *
  *  @return   the checksum
  */
-u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
+VINILAPI u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
 
 /** @brief  As described in VHD specification, this function calculates CHS
  *
@@ -85,7 +85,7 @@ u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
  *
  *  @return   CHS
  */
-u32 vinil_compute_chs(u64 size);
+VINILAPI u32 vinil_compute_chs(u64 size);
 
 /** @brief  CHS is composed by cylinders (2 bytes), tracks (1 byte),
  *          and secotrs-per-track (1 byte)
@@ -98,7 +98,7 @@ u32 vinil_compute_chs(u64 size);
  *
  *  @return   CHS encoded
  */
-u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track);
+VINILAPI u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track);
 
 /** @brief  Gets the number of cylinders
  *
@@ -106,7 +106,7 @@ u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track);
  *
  *  @return   number of cylinders
  */
-u32 vinil_geometry_get_cylinders(u32 geometry);
+VINILAPI u32 vinil_geometry_get_cylinders(u32 geometry);
 
 /** @brief  Gets the number of heads
  *
@@ -114,7 +114,7 @@ u32 vinil_geometry_get_cylinders(u32 geometry);
  *
  *  @return   number of heads
  */
-u32 vinil_geometry_get_head(u32 geometry);
+VINILAPI u32 vinil_geometry_get_head(u32 geometry);
 
 /** @brief  Gets the number of sectors per track
  *
@@ -122,13 +122,13 @@ u32 vinil_geometry_get_head(u32 geometry);
  *
  *  @return   number of sectors per track
  */
-u32 vinil_geometry_get_sectors_per_track(u32 geometry);
+VINILAPI u32 vinil_geometry_get_sectors_per_track(u32 geometry);
 
 /** @brief  Function for byte order swapping
  *
  *  @param    vhd_footer      VHD Footer
  */
-void vinil_vhd_footer_byte_swap(VHDFooter* vhd_footer);
+VINILAPI void vinil_vhd_footer_byte_swap(VHDFooter* vhd_footer);
 
 
 /** @brief  Opens a VHD file
@@ -138,13 +138,13 @@ void vinil_vhd_footer_byte_swap(VHDFooter* vhd_footer);
  *  @return   If the operation was succesfully opened this function will return a pointer to VHD object. 
  *            Otherwise, a null pointer is returned.
  */
-VHD* vinil_vhd_open(const char* filename);
+VINILAPI VHD* vinil_vhd_open(const char* filename);
 
 /** @brief  Closes and destroy the VHD object
  *
  *  @param    vhd      VHD object
  */
-void vinil_vhd_close(VHD* vhd);
+VINILAPI void vinil_vhd_close(VHD* vhd);
 
 /** @brief  Reads a sector from the VHD object
  *
@@ -157,7 +157,7 @@ void vinil_vhd_close(VHD* vhd);
  *  @return   If the operation was succesfully executed this function will return TRUE.
  *            Otherwise, FALSE will be returned.
  */
-int vinil_vhd_read(VHD* vhd, void* buffer, int count);
+VINILAPI int vinil_vhd_read(VHD* vhd, void* buffer, int count);
 
 /** @brief  Writes a sector to a virtual hard disk file
  *
@@ -170,7 +170,7 @@ int vinil_vhd_read(VHD* vhd, void* buffer, int count);
  *  @return   If the operation was succesfully executed this function will return TRUE.
  *            Otherwise, FALSE will be returned.
  */
-int vinil_vhd_write(VHD* vhd, void* buffer, int count);
+VINILAPI int vinil_vhd_write(VHD* vhd, void* buffer, int count);
 
 /** @brief  Returns the current sector number
  *
@@ -179,7 +179,7 @@ int vinil_vhd_write(VHD* vhd, void* buffer, int count);
  *  @return   On success, the current sector number is returned. 
  *            If an error occurs, -1L is returned.
  */
-long vinil_vhd_tell(VHD* vhd);
+VINILAPI long vinil_vhd_tell(VHD* vhd);
 
 /** @brief  Sets the position indicator associated with the VHD object to a new
  *          position defined by the number of sector indicated by offset to a 
@@ -208,7 +208,7 @@ long vinil_vhd_tell(VHD* vhd);
  *  @return   On success, the function returns TRUE.
  *            If an error occurs, it returns FALSE.
  */
-int vinil_vhd_seek(VHD* vhd, long offset, int origin);
+VINILAPI int vinil_vhd_seek(VHD* vhd, long offset, int origin);
 
 /** @brief  It is like fflush C function.
  *
@@ -217,7 +217,7 @@ int vinil_vhd_seek(VHD* vhd, long offset, int origin);
  *  @return   On success, the function return TRUE.
  *            If an error occurs, it return FALSE
  */
-int vinil_vhd_flush(VHD* vhd);
+VINILAPI int vinil_vhd_flush(VHD* vhd);
 
 /** @brief  If necessary it changes the virtual hard disk's size 
  *          and write the VHDFooter struct at the end of file
@@ -227,6 +227,6 @@ int vinil_vhd_flush(VHD* vhd);
  *  @return   On success, the function return TRUE.
  *            If an error occurs, it return FALSE
  */
-int vinil_vhd_commit_structural_changes(VHD* vhd);
+VINILAPI int vinil_vhd_commit_structural_changes(VHD* vhd);
 
 #endif

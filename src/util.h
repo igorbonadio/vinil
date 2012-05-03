@@ -10,4 +10,14 @@
 #define TRUE  1
 #define FALSE 0
 
+#ifndef _WIN32
+  #define VINILAPI
+#else
+  #ifdef __cplusplus
+    #define VINILAPI extern "C" __declspec(dllexport)
+  #else
+    #define VINILAPI __declspec(dllexport)
+  #endif
+#endif
+
 #endif
