@@ -32,35 +32,35 @@ typedef struct {
   vinil_uuid  uuid;
   char      saved_state;
   char      reserved[427];
-} VHDFooter;
+} VinilVHDFooter;
 
 /** @brief Represents a virtual hard disk file */
 typedef struct {
   FILE* fd;
-  VHDFooter* footer;
+  VinilVHDFooter* footer;
 } VHD;
 
-/** @brief  Creates a new VHDFooter object
+/** @brief  Creates a new VinilVHDFooter object
  *
- *  @return   a new VHDFooter object
+ *  @return   a new VinilVHDFooter object
  */
-VINILAPI VHDFooter* vinil_vhd_footer_create();
+VINILAPI VinilVHDFooter* vinil_vhd_footer_create();
 
 /** @brief  Reads a VHD footer
  *
  *  @param    fd          a VHD file descriptor
  *
- *  @param    vhd_footer  a VHDFooter object that will contain vhd footer's information
+ *  @param    vhd_footer  a VinilVHDFooter object that will contain vhd footer's information
  *
  *  @return   Returns TRUE if successful or FALSE otherwise.
  */
-VINILAPI int vinil_vhd_footer_read(FILE* fd, VHDFooter* vhd_footer);
+VINILAPI int vinil_vhd_footer_read(FILE* fd, VinilVHDFooter* vhd_footer);
 
-/** @brief  Destroys a VHDFooter object
+/** @brief  Destroys a VinilVHDFooter object
  *
- *  @param    vhd_footer  a VHDFooter object to be destroyed
+ *  @param    vhd_footer  a VinilVHDFooter object to be destroyed
  */
-VINILAPI void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
+VINILAPI void vinil_vhd_footer_destroy(VinilVHDFooter* vhd_footer);
 
 /** @brief  Calculates VDH Footer's checksum
  *
@@ -68,7 +68,7 @@ VINILAPI void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
  *
  *  @return   the checksum
  */
-VINILAPI uint32_t vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
+VINILAPI uint32_t vinil_checksum_vhd_footer(VinilVHDFooter* vhd_footer);
 
 /** @brief  As described in VHD specification, this function calculates CHS
  *
@@ -119,7 +119,7 @@ VINILAPI uint32_t vinil_geometry_get_sectors_per_track(uint32_t geometry);
  *
  *  @param    vhd_footer      VHD Footer
  */
-VINILAPI void vinil_vhd_footer_byte_swap(VHDFooter* vhd_footer);
+VINILAPI void vinil_vhd_footer_byte_swap(VinilVHDFooter* vhd_footer);
 
 
 /** @brief  Opens a VHD file
@@ -211,7 +211,7 @@ VINILAPI int vinil_vhd_seek(VHD* vhd, long offset, int origin);
 VINILAPI int vinil_vhd_flush(VHD* vhd);
 
 /** @brief  If necessary it changes the virtual hard disk's size 
- *          and write the VHDFooter struct at the end of file
+ *          and write the VinilVHDFooter struct at the end of file
  *
  *  @param    vhd       VHD object
  *

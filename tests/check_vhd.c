@@ -28,7 +28,7 @@ START_TEST (test_vinil_checksum_vhd_footer) {
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(fd != NULL, error_msg);
 
-    VHDFooter* footer = vinil_vhd_footer_create();
+    VinilVHDFooter* footer = vinil_vhd_footer_create();
     sprintf(error_msg, "Cannot create vhd_footer for %s", vhd_files[i]);
     fail_unless(footer != NULL, error_msg);
     
