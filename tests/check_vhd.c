@@ -6,7 +6,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/time.h>
+#include <time.h>
 
 #include <check.h>
 
@@ -192,9 +192,7 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   vhd->footer->features = 0;
   vhd->footer->file_format_version = 0x00010000;
   vhd->footer->data_offset = 0xFFFFFFFF;
-  struct timeval tv;
-  gettimeofday(&tv,NULL);
-  vhd->footer->timestamp = tv.tv_sec;
+  vhd->footer->timestamp = time(NULL);
   memcpy(vhd->footer->creator_application, "vnil", 4);
   vhd->footer->creator_version = 0x00000001;
   vhd->footer->creator_host_os = 0x4D616320;                    // Mac OS X
