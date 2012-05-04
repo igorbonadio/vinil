@@ -7,7 +7,7 @@
 // ./write_vhd test.vhd 0 a
 int main(int argc, char* argv[]) {
   char* vhd_path = argv[1];
-  u64 vhd_sector = atol(argv[2]);
+  uint64_t vhd_sector = atol(argv[2]);
   char c = argv[3][0];
   char buffer[512];
 

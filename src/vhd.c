@@ -8,25 +8,25 @@
 
 #include <stdlib.h>
 
-u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
+uint32_t vinil_checksum_vhd_footer(VHDFooter* vhd_footer) {
   unsigned char* buffer;
   buffer = (unsigned char*)vhd_footer;
   
-  u32 temp_checksum = vhd_footer->checksum;
+  uint32_t temp_checksum = vhd_footer->checksum;
   vhd_footer->checksum = 0;
   
-  u32 checksum = 0;
+  uint32_t checksum = 0;
   int i;
   for (i = 0; i < sizeof(VHDFooter); i++)
-    checksum += (u32)buffer[i];
+    checksum += (uint32_t)buffer[i];
   
   vhd_footer->checksum = temp_checksum;
   
   return ~checksum;
 }
 
-u32 vinil_compute_chs(u64 size) {
-  u32 sectors, cylinders, heads, sectors_per_track, cylinder_times_head;
+uint32_t vinil_compute_chs(uint64_t size) {
+  uint32_t sectors, cylinders, heads, sectors_per_track, cylinder_times_head;
 
   sectors = size/512;
 
@@ -63,30 +63,30 @@ u32 vinil_compute_chs(u64 size) {
   return vinil_geometry_encode(cylinders, heads, sectors_per_track);
 }
 
-u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track) {
+uint32_t vinil_geometry_encode(uint32_t cylinders, uint32_t heads, uint32_t sectors_per_track) {
   return (cylinders << 16) | (heads << 8) | sectors_per_track;
 }
 
-u32 vinil_geometry_get_cylinders(u32 geometry) {
+uint32_t vinil_geometry_get_cylinders(uint32_t geometry) {
   return (geometry >> 16) & 0xffff;
 }
 
-u32 vinil_geometry_get_head(u32 geometry) {
+uint32_t vinil_geometry_get_head(uint32_t geometry) {
   return (geometry >> 8)  & 0xff;
 }
 
-u32 vinil_geometry_get_sectors_per_track(u32 geometry) {
+uint32_t vinil_geometry_get_sectors_per_track(uint32_t geometry) {
   return geometry & 0xff;
 }
 
-static inline u32 byte_swap_32(u32 x)
+static inline uint32_t byte_swap_32(uint32_t x)
 {
     return
     ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) |
      (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24));
 }
 
-static inline u64 byte_swap_64(u64 x)
+static inline uint64_t byte_swap_64(uint64_t x)
 {
     return
     ((((x) & 0xff00000000000000ULL) >> 56) |

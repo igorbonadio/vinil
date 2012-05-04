@@ -7,7 +7,7 @@
 // ./read_vhd test.vhd 0
 int main(int argc, char* argv[]) {
   char* vhd_path = argv[1];
-  u64 vhd_sector = atol(argv[2]);
+  uint64_t vhd_sector = atol(argv[2]);
   char buffer[512];
 
   VHD* vhd = vinil_vhd_open(vhd_path);

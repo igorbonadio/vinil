@@ -8,7 +8,7 @@
 // ./create_vhd test.vhd 1024
 int main(int argc, char* argv[]) {
   char* vhd_path = argv[1];      // filename
-  u64 vhd_size = atol(argv[2]);  // virtual hard disk size
+  uint64_t vhd_size = atol(argv[2]);  // virtual hard disk size
 
   VHD* vhd = vinil_vhd_open(vhd_path);
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   vhd->footer->features = 0;
   vhd->footer->file_format_version = 0x00010000;
   vhd->footer->data_offset = 0xFFFFFFFF;
-  vhd->footer->timestamp = (u32)time(NULL);
+  vhd->footer->timestamp = (uint32_t)time(NULL);
   memcpy(vhd->footer->creator_application, "vnil", 4);
   vhd->footer->creator_version = 0x00000001;
   vhd->footer->creator_host_os = 0x4D616320;                    // Mac OS X

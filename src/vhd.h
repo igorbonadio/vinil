@@ -12,28 +12,26 @@
 #include <stdint.h>
 
 #include "util.h"
-
-typedef uint32_t u32;
-typedef uint64_t u64;
+#include "crossplatform.h"
 
 /** @brief Stores basic informations which is shared by all the VHDs types */
 typedef struct {
-  char cookie[8];
-  u32 features;
-  u32 file_format_version;
-  u64 data_offset;
-  u32 timestamp;
-  char creator_application[4];
-  u32 creator_version;
-  u32 creator_host_os;
-  u64 original_size;
-  u64 current_size;
-  u32 disk_geometry;
-  u32 disk_type;
-  u32 checksum;
-  vhd_uuid uuid;
-  char saved_state;
-  char reserved[427];
+  char      cookie[8];
+  uint32_t  features;
+  uint32_t  file_format_version;
+  uint64_t  data_offset;
+  uint32_t  timestamp;
+  char      creator_application[4];
+  uint32_t  creator_version;
+  uint32_t  creator_host_os;
+  uint64_t  original_size;
+  uint64_t  current_size;
+  uint32_t  disk_geometry;
+  uint32_t  disk_type;
+  uint32_t  checksum;
+  vhd_uuid  uuid;
+  char      saved_state;
+  char      reserved[427];
 } VHDFooter;
 
 /** @brief Represents a virtual hard disk file */
@@ -70,7 +68,7 @@ VINILAPI void vinil_vhd_footer_destroy(VHDFooter* vhd_footer);
  *
  *  @return   the checksum
  */
-VINILAPI u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
+VINILAPI uint32_t vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
 
 /** @brief  As described in VHD specification, this function calculates CHS
  *
@@ -78,7 +76,7 @@ VINILAPI u32 vinil_checksum_vhd_footer(VHDFooter* vhd_footer);
  *
  *  @return   CHS
  */
-VINILAPI u32 vinil_compute_chs(u64 size);
+VINILAPI uint32_t vinil_compute_chs(uint64_t size);
 
 /** @brief  CHS is composed by cylinders (2 bytes), tracks (1 byte),
  *          and secotrs-per-track (1 byte)
@@ -91,7 +89,7 @@ VINILAPI u32 vinil_compute_chs(u64 size);
  *
  *  @return   CHS encoded
  */
-VINILAPI u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_track);
+VINILAPI uint32_t vinil_geometry_encode(uint32_t cylinders, uint32_t heads, uint32_t sectors_per_track);
 
 /** @brief  Gets the number of cylinders
  *
@@ -99,7 +97,7 @@ VINILAPI u32 vinil_geometry_encode(u32 cylinders, u32 heads, u32 sectors_per_tra
  *
  *  @return   number of cylinders
  */
-VINILAPI u32 vinil_geometry_get_cylinders(u32 geometry);
+VINILAPI uint32_t vinil_geometry_get_cylinders(uint32_t geometry);
 
 /** @brief  Gets the number of heads
  *
@@ -107,7 +105,7 @@ VINILAPI u32 vinil_geometry_get_cylinders(u32 geometry);
  *
  *  @return   number of heads
  */
-VINILAPI u32 vinil_geometry_get_head(u32 geometry);
+VINILAPI uint32_t vinil_geometry_get_head(uint32_t geometry);
 
 /** @brief  Gets the number of sectors per track
  *
@@ -115,7 +113,7 @@ VINILAPI u32 vinil_geometry_get_head(u32 geometry);
  *
  *  @return   number of sectors per track
  */
-VINILAPI u32 vinil_geometry_get_sectors_per_track(u32 geometry);
+VINILAPI uint32_t vinil_geometry_get_sectors_per_track(uint32_t geometry);
 
 /** @brief  Function for byte order swapping
  *

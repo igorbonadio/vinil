@@ -7,8 +7,6 @@
 #ifndef VINIL_UTIL_H_
 #define VINIL_UTIL_H_
 
-#include "crossplatform.h"
-
 #define TRUE  1
 #define FALSE 0
 
