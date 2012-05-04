@@ -8,6 +8,7 @@ It works on...
 
 - Mac OS X
 - Linux
+- Windows
 
 Development Environment
 -----------------------
