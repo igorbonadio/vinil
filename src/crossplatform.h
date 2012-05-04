@@ -21,6 +21,6 @@
 
 typedef uuid_t vinil_uuid;
 
-VINILAPI void vinil_cp_uuid_generate(vinil_uuid* uuid);
+VINILAPI void vinil_uuid_generate(vinil_uuid* uuid);
 
 #endif

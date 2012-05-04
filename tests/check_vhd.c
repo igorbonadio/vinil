@@ -200,7 +200,7 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   vhd->footer->current_size = 4*1024*1024;                      // 4MB
   vhd->footer->disk_geometry = vinil_compute_chs(4*1024*1024);
   vhd->footer->disk_type = 2;                                   // Fixed
-  vinil_cp_uuid_generate(&vhd->footer->uuid);
+  vinil_uuid_generate(&vhd->footer->uuid);
   vhd->footer->saved_state = 0;
   vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
   
