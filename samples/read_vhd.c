@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
   uint64_t vhd_sector = atol(argv[2]);
   char buffer[512];
 
-  VHD* vhd = vinil_vhd_open(vhd_path);
+  VinilVHD* vhd = vinil_vhd_open(vhd_path);
 
   if (!vhd) {
     printf("ERROR: Can't open %s\n", vhd_path);

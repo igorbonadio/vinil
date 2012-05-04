@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
   for (i = 0; i < 512; i++)
     buffer[i] = c;
 
-  VHD* vhd = vinil_vhd_open(vhd_path);
+  VinilVHD* vhd = vinil_vhd_open(vhd_path);
 
   if (!vhd) {
     printf("ERROR: Can't open %s\n", vhd_path);

@@ -56,7 +56,7 @@ START_TEST (test_vinil_open) {
   for (i = 0; i < 2; i++) {
     sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
     
-    VHD* vhd = vinil_vhd_open(vhd_path);
+    VinilVHD* vhd = vinil_vhd_open(vhd_path);
     
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);
@@ -82,7 +82,7 @@ START_TEST (test_vinil_read) {
   for (i = 0; i < 2; i++) {
     sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
     
-    VHD* vhd = vinil_vhd_open(vhd_path);
+    VinilVHD* vhd = vinil_vhd_open(vhd_path);
     
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);
@@ -110,7 +110,7 @@ START_TEST (test_vinil_tell) {
   for (i = 0; i < 2; i++) {
     sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
     
-    VHD* vhd = vinil_vhd_open(vhd_path);
+    VinilVHD* vhd = vinil_vhd_open(vhd_path);
     
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);
@@ -143,7 +143,7 @@ START_TEST (test_vinil_seek) {
   for (i = 0; i < 2; i++) {
     sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
     
-    VHD* vhd = vinil_vhd_open(vhd_path);
+    VinilVHD* vhd = vinil_vhd_open(vhd_path);
     
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);
@@ -185,7 +185,7 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   f = fopen(vhd_path, "r");
   fail_unless(f == NULL, "new_vhd_file.vhd already exists");
   
-  VHD* vhd = vinil_vhd_open(vhd_path);
+  VinilVHD* vhd = vinil_vhd_open(vhd_path);
   fail_unless(vhd != NULL, "Cannot open new_vhd_file.vhd");
   
   memcpy(vhd->footer->cookie, "conectix", 9);
@@ -228,7 +228,7 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   vinil_vhd_close(vhd);
   
   // checking the new file...
-  VHD* vhd2 = vinil_vhd_open(vhd_path);
+  VinilVHD* vhd2 = vinil_vhd_open(vhd_path);
   fail_unless(vhd2 != NULL, "Cannot reopen new_vhd_file.vhd");
   vinil_vhd_close(vhd2);
   
@@ -245,7 +245,7 @@ START_TEST (test_vinil_geometry_encode) {
   for (i = 0; i < 2; i++) {
     sprintf(vhd_path, "../tests/data/%s", vhd_files[i]);
     
-    VHD* vhd = vinil_vhd_open(vhd_path);
+    VinilVHD* vhd = vinil_vhd_open(vhd_path);
     
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);

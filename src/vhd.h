@@ -38,7 +38,7 @@ typedef struct {
 typedef struct {
   FILE* fd;
   VinilVHDFooter* footer;
-} VHD;
+} VinilVHD;
 
 /** @brief  Creates a new VinilVHDFooter object
  *
@@ -129,17 +129,17 @@ VINILAPI void vinil_vhd_footer_byte_swap(VinilVHDFooter* vhd_footer);
  *  @return   If the operation was succesfully opened this function will return a pointer to VHD object. 
  *            Otherwise, a null pointer is returned.
  */
-VINILAPI VHD* vinil_vhd_open(const char* filename);
+VINILAPI VinilVHD* vinil_vhd_open(const char* filename);
 
-/** @brief  Closes and destroy the VHD object
+/** @brief  Closes and destroy the VinilVHD object
  *
- *  @param    vhd      VHD object
+ *  @param    vhd      VinilVHD object
  */
-VINILAPI void vinil_vhd_close(VHD* vhd);
+VINILAPI void vinil_vhd_close(VinilVHD* vhd);
 
-/** @brief  Reads a sector from the VHD object
+/** @brief  Reads a sector from the VinilVHD object
  *
- *  @param    vhd       VHD object
+ *  @param    vhd       VinilVHD object
  *
  *  @param    buffer    a (512*count) bytes buffer
  *
@@ -148,11 +148,11 @@ VINILAPI void vinil_vhd_close(VHD* vhd);
  *  @return   If the operation was succesfully executed this function will return TRUE.
  *            Otherwise, FALSE will be returned.
  */
-VINILAPI int vinil_vhd_read(VHD* vhd, void* buffer, int count);
+VINILAPI int vinil_vhd_read(VinilVHD* vhd, void* buffer, int count);
 
 /** @brief  Writes a sector to a virtual hard disk file
  *
- *  @param    vhd       VHD object
+ *  @param    vhd       VinilVHD object
  *
  *  @param    buffer    a (512*count) bytes buffer
  *
@@ -161,22 +161,22 @@ VINILAPI int vinil_vhd_read(VHD* vhd, void* buffer, int count);
  *  @return   If the operation was succesfully executed this function will return TRUE.
  *            Otherwise, FALSE will be returned.
  */
-VINILAPI int vinil_vhd_write(VHD* vhd, void* buffer, int count);
+VINILAPI int vinil_vhd_write(VinilVHD* vhd, void* buffer, int count);
 
 /** @brief  Returns the current sector number
  *
- *  @param    vhd       VHD object
+ *  @param    vhd       VinilVHD object
  *
  *  @return   On success, the current sector number is returned. 
  *            If an error occurs, -1L is returned.
  */
-VINILAPI long vinil_vhd_tell(VHD* vhd);
+VINILAPI long vinil_vhd_tell(VinilVHD* vhd);
 
-/** @brief  Sets the position indicator associated with the VHD object to a new
+/** @brief  Sets the position indicator associated with the VinilVHD object to a new
  *          position defined by the number of sector indicated by offset to a 
  *          reference position specified by origin.
  *
- *  @param    vhd       VHD object
+ *  @param    vhd       VinilVHD object
  *
  *  @param    offset    number of sector to offset from origin
  *
@@ -199,25 +199,25 @@ VINILAPI long vinil_vhd_tell(VHD* vhd);
  *  @return   On success, the function returns TRUE.
  *            If an error occurs, it returns FALSE.
  */
-VINILAPI int vinil_vhd_seek(VHD* vhd, long offset, int origin);
+VINILAPI int vinil_vhd_seek(VinilVHD* vhd, long offset, int origin);
 
 /** @brief  It is like fflush C function.
  *
- *  @param    vhd       VHD object
+ *  @param    vhd       VinilVHD object
  *
  *  @return   On success, the function return TRUE.
  *            If an error occurs, it return FALSE
  */
-VINILAPI int vinil_vhd_flush(VHD* vhd);
+VINILAPI int vinil_vhd_flush(VinilVHD* vhd);
 
 /** @brief  If necessary it changes the virtual hard disk's size 
  *          and write the VinilVHDFooter struct at the end of file
  *
- *  @param    vhd       VHD object
+ *  @param    vhd       VinilVHD object
  *
  *  @return   On success, the function return TRUE.
  *            If an error occurs, it return FALSE
  */
-VINILAPI int vinil_vhd_commit_structural_changes(VHD* vhd);
+VINILAPI int vinil_vhd_commit_structural_changes(VinilVHD* vhd);
 
 #endif

@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
   char* vhd_path = argv[1];      // filename
   uint64_t vhd_size = atol(argv[2]);  // virtual hard disk size
 
-  VHD* vhd = vinil_vhd_open(vhd_path);
+  VinilVHD* vhd = vinil_vhd_open(vhd_path);
 
   if (!vhd) {
     printf("ERROR: Can't open %s\n", vhd_path);

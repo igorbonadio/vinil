@@ -113,7 +113,7 @@ void vinil_vhd_footer_byte_swap(VinilVHDFooter* vhd_footer) {
   vhd_footer->checksum = byte_swap_32(vhd_footer->checksum);
 }
 
-VHD* vinil_vhd_open(const char* filename) {
+VinilVHD* vinil_vhd_open(const char* filename) {
   int error;
   int file_exists = 0;
   
@@ -129,7 +129,7 @@ VHD* vinil_vhd_open(const char* filename) {
       return NULL;
   }
   
-  VHD* vhd = (VHD*)malloc(sizeof(VHD));
+  VinilVHD* vhd = (VinilVHD*)malloc(sizeof(VinilVHD));
   if (vhd == NULL)
     return NULL;
   
@@ -167,7 +167,7 @@ VHD* vinil_vhd_open(const char* filename) {
   return vhd;
 }
 
-void vinil_vhd_close(VHD* vhd) {
+void vinil_vhd_close(VinilVHD* vhd) {
   fclose(vhd->fd);
   vinil_vhd_footer_destroy(vhd->footer);
   free(vhd);
@@ -209,7 +209,7 @@ void vinil_vhd_footer_destroy(VinilVHDFooter* vhd_footer) {
   free(vhd_footer);
 }
 
-int vinil_vhd_read(VHD* vhd, void* buffer, int count) {
+int vinil_vhd_read(VinilVHD* vhd, void* buffer, int count) {
   if (ftell(vhd->fd) > (vhd->footer->current_size - 512*count))
     return FALSE;
   
@@ -218,7 +218,7 @@ int vinil_vhd_read(VHD* vhd, void* buffer, int count) {
   return bytes == 512*count ? TRUE : FALSE;
 }
 
-int vinil_vhd_write(VHD* vhd, void* buffer, int count) {
+int vinil_vhd_write(VinilVHD* vhd, void* buffer, int count) {
   if (ftell(vhd->fd) > (vhd->footer->current_size - 512*count))
     return FALSE;
   
@@ -227,11 +227,11 @@ int vinil_vhd_write(VHD* vhd, void* buffer, int count) {
   return bytes == 512*count ? TRUE : FALSE;
 }
 
-long vinil_vhd_tell(VHD* vhd) {
+long vinil_vhd_tell(VinilVHD* vhd) {
   return ftell(vhd->fd)/512;
 }
 
-int vinil_vhd_seek(VHD* vhd, long offset, int origin) {
+int vinil_vhd_seek(VinilVHD* vhd, long offset, int origin) {
   if (origin == SEEK_END) {
     int error = 0;
     
@@ -250,11 +250,11 @@ int vinil_vhd_seek(VHD* vhd, long offset, int origin) {
   return fseek(vhd->fd, offset*512, origin) ? FALSE : TRUE;
 }
 
-int vinil_vhd_flush(VHD* vhd) {
+int vinil_vhd_flush(VinilVHD* vhd) {
   return fflush(vhd->fd) ? FALSE : TRUE;
 }
 
-int vinil_vhd_commit_structural_changes(VHD* vhd) {
+int vinil_vhd_commit_structural_changes(VinilVHD* vhd) {
   int error = fseek(vhd->fd, vhd->footer->current_size, SEEK_SET);
   if (error) {
     return FALSE;
