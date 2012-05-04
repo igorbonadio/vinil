@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
   vhd->footer->current_size = vhd_size;
   vhd->footer->disk_geometry = vinil_compute_chs(vhd_size);
   vhd->footer->disk_type = 2;                                   // Fixed
-  uuid_generate(vhd->footer->uuid);
+  vinil_cp_uuid_generate(&vhd->footer->uuid);
   vhd->footer->saved_state = 0;
   vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
 

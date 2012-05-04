@@ -11,17 +11,10 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#ifdef _MSC_VER
-#include <windows.h>
-#else
-#include <uuid/uuid.h>
-#endif
-
 #include "util.h"
 
 typedef uint32_t u32;
 typedef uint64_t u64;
-typedef uuid_t vhd_uuid;
 
 /** @brief Stores basic informations which is shared by all the VHDs types */
 typedef struct {
