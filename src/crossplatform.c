@@ -1,6 +1,6 @@
 #include "crossplatform.h"
 
-void vinil_cp_uuid_generate(vhd_uuid* uuid) {
+void vinil_cp_uuid_generate(vinil_uuid* uuid) {
 #ifdef _WIN32
   CoCreateGuid(uuid);
 #else

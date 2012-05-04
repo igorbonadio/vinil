@@ -29,7 +29,7 @@ typedef struct {
   uint32_t  disk_geometry;
   uint32_t  disk_type;
   uint32_t  checksum;
-  vhd_uuid  uuid;
+  vinil_uuid  uuid;
   char      saved_state;
   char      reserved[427];
 } VHDFooter;

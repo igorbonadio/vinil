@@ -19,8 +19,8 @@
 
 #include "util.h"
 
-typedef uuid_t vhd_uuid;
+typedef uuid_t vinil_uuid;
 
-VINILAPI void vinil_cp_uuid_generate(vhd_uuid* uuid);
+VINILAPI void vinil_cp_uuid_generate(vinil_uuid* uuid);
 
 #endif
