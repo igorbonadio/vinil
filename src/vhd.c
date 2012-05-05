@@ -174,7 +174,7 @@ void vinil_vhd_close(VinilVHD* vhd) {
 }
 
 int vinil_vhd_footer_read(FILE* fd, VinilVHDFooter* vhd_footer) {
-  int error = vinil_fseek(fd,  - sizeof(VinilVHDFooter), SEEK_END);
+  int error = vinil_fseek(fd,  0 - sizeof(VinilVHDFooter), SEEK_END);
   if (error)
     return FALSE;
   
@@ -229,7 +229,7 @@ int vinil_vhd_seek(VinilVHD* vhd, long offset, int origin) {
   if (origin == SEEK_END) {
     int error = 0;
     
-    error = vinil_fseek(vhd->fd, - sizeof(VinilVHDFooter), SEEK_END);
+    error = vinil_fseek(vhd->fd, 0 - sizeof(VinilVHDFooter), SEEK_END);
     if (error) {
       return FALSE;
     }
