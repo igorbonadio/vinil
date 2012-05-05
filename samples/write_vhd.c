@@ -3,6 +3,8 @@
  *  @brief      This application writes sectors from a Virtual Hard Disk.
  *              In fact, this application is limited by the atol function,
  *              so you can create VHDs up to 2GB.
+ *              But it is important to mention that Vinil doens't have this
+ *              limitation.
  *  @author     Igor Bonadio
  *  @copyright  MIT License. See Copyright Notice in LICENSE.txt
  */
