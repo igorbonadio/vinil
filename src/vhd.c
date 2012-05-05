@@ -158,7 +158,7 @@ VinilVHD* vinil_vhd_open(const char* filename) {
   }
   
   
-  error = fseeko(vhd->fd, 0, SEEK_SET);
+  error = vinil_fseek(vhd->fd, 0, SEEK_SET);
   if (error) {
     vinil_vhd_close(vhd);
     return NULL;
@@ -174,7 +174,7 @@ void vinil_vhd_close(VinilVHD* vhd) {
 }
 
 int vinil_vhd_footer_read(FILE* fd, VinilVHDFooter* vhd_footer) {
-  int error = fseeko(fd,  - sizeof(VinilVHDFooter), SEEK_END);
+  int error = vinil_fseek(fd,  - sizeof(VinilVHDFooter), SEEK_END);
   if (error)
     return FALSE;
   
@@ -229,14 +229,14 @@ int vinil_vhd_seek(VinilVHD* vhd, long offset, int origin) {
   if (origin == SEEK_END) {
     int error = 0;
     
-    error = fseeko(vhd->fd, - sizeof(VinilVHDFooter), SEEK_END);
+    error = vinil_fseek(vhd->fd, - sizeof(VinilVHDFooter), SEEK_END);
     if (error) {
       return FALSE;
     }
     
     return TRUE;
   }  
-  return fseeko(vhd->fd, offset*512, origin) ? FALSE : TRUE;
+  return vinil_fseek(vhd->fd, offset*512, origin) ? FALSE : TRUE;
 }
 
 int vinil_vhd_flush(VinilVHD* vhd) {
@@ -244,7 +244,7 @@ int vinil_vhd_flush(VinilVHD* vhd) {
 }
 
 int vinil_vhd_commit_structural_changes(VinilVHD* vhd) {
-  int error = fseeko(vhd->fd, vhd->footer->current_size, SEEK_SET);
+  int error = vinil_fseek(vhd->fd, vhd->footer->current_size, SEEK_SET);
   if (error) {
     return FALSE;
   }
@@ -257,7 +257,7 @@ int vinil_vhd_commit_structural_changes(VinilVHD* vhd) {
   
   vinil_vhd_footer_byte_swap(vhd->footer);
   
-  error = fseeko(vhd->fd, 0, SEEK_SET);
+  error = vinil_fseek(vhd->fd, 0, SEEK_SET);
   if (error) {
     return FALSE;
   }

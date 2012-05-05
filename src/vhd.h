@@ -1,5 +1,5 @@
 /** 
- *  @file	      vhd.h
+ *  @file       vhd.h
  *  @brief      Virtual Hard Disk I/O interface.
  *  @author     Igor Bonadio
  *  @copyright  MIT License. See Copyright Notice in LICENSE.txt
