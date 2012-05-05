@@ -1,3 +1,12 @@
+/** 
+ *  @file       create_vhd.c
+ *  @brief      This application creates a new Virtual Hard Disk.
+ *              In fact, this application is limited by the atol function,
+ *              so you can create VHDs up to 2GB.
+ *  @author     Igor Bonadio
+ *  @copyright  MIT License. See Copyright Notice in LICENSE.txt
+ */
+
 #include "vhd.h"
 
 #include <stdio.h>
