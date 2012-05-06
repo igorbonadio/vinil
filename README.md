@@ -1,4 +1,4 @@
-Vinil 0.1.0
+Vinil 0.1.1
 ===========
 
 Vinil is a C library for creating, reading and writing virtual hard disks. At this moment, it can be used to work with Fixed VHDs but we are working to extend Vinil to manipulate Dinamic VHDs, Differencing VHDs and other formats like VMDK and VDI.
