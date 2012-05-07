@@ -6,6 +6,8 @@ IF(MSVC)
   ADD_DEFINITIONS("/TP")
 ENDIF(MSVC)
 
+ADD_DEFINITIONS("-D_FILE_OFFSET_BITS=64")
+
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(samples)
