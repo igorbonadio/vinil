@@ -32,6 +32,6 @@
 typedef uuid_t vinil_uuid;
 
 VINILAPI void vinil_uuid_generate(vinil_uuid* uuid);
-VINILAPI int vinil_fseek(FILE *fd, uint64_t offset, int origin);
+VINILAPI int vinil_fseek(FILE *fd, int64_t offset, int origin);
 
 #endif

@@ -14,7 +14,7 @@ void vinil_uuid_generate(vinil_uuid* uuid) {
 #endif
 }
 
-int vinil_fseek(FILE *fd, uint64_t offset, int origin) {
+int vinil_fseek(FILE *fd, int64_t offset, int origin) {
 #ifdef _WIN32
   return _fseeki64(fd, offset, origin);
 #else
