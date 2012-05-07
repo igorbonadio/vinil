@@ -21,6 +21,7 @@
 #ifdef _WIN32
   #include <windows.h>
 #else
+  #define _FILE_OFFSET_BITS 64
   #include <uuid/uuid.h>
 #endif
 
