@@ -21,3 +21,11 @@ int vinil_fseek(FILE *fd, int64_t offset, int origin) {
   return fseeko(fd, offset, origin);
 #endif
 }
+
+VINILAPI int64_t vinil_ftell(FILE *fd) {
+#ifdef _WIN32
+  return _ftelli64(fd);
+#else
+  return ftello(fd);
+#endif
+}
