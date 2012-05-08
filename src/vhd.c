@@ -222,7 +222,7 @@ int vinil_vhd_write(VinilVHD* vhd, void* buffer, int count) {
   return bytes == 512*count ? TRUE : FALSE;
 }
 
-long vinil_vhd_tell(VinilVHD* vhd) {
+int64_t vinil_vhd_tell(VinilVHD* vhd) {
   return vinil_ftell(vhd->fd)/512;
 }
 

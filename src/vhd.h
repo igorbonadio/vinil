@@ -170,7 +170,7 @@ VINILAPI int vinil_vhd_write(VinilVHD* vhd, void* buffer, int count);
  *  @return   On success, the current sector number is returned. 
  *            If an error occurs, -1L is returned.
  */
-VINILAPI long vinil_vhd_tell(VinilVHD* vhd);
+VINILAPI int64_t vinil_vhd_tell(VinilVHD* vhd);
 
 /** @brief  Sets the position indicator associated with the VinilVHD object to a new
  *          position defined by the number of sector indicated by offset to a 
