@@ -148,22 +148,22 @@ START_TEST (test_vinil_seek) {
     sprintf(error_msg, "Cannot open %s", vhd_files[i]);
     fail_unless(vhd != NULL, error_msg);
     
-    sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
+    sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s (1)", vhd_files[i]);
     fail_unless(vinil_vhd_seek(vhd, 0, SEEK_END), error_msg);
     
-    sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
+    sprintf(error_msg, "It is not the last sector of %s (1)", vhd_files[i]);
     fail_unless(vinil_vhd_tell(vhd) == vhd->footer->current_size/512, error_msg);
     
-    sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
+    sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s (2)", vhd_files[i]);
     fail_unless(vinil_vhd_seek(vhd, vhd->footer->current_size/512 - 1, SEEK_SET), error_msg);
     
-    sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
+    sprintf(error_msg, "It is not the last sector of %s (2)", vhd_files[i]);
     fail_unless(vinil_vhd_tell(vhd) == vhd->footer->current_size/512 - 1, error_msg);
     
-    sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s", vhd_files[i]);
+    sprintf(error_msg, "Cannot execute vinil_vhd_seek in %s (3)", vhd_files[i]);
     fail_unless(vinil_vhd_seek(vhd, 1, SEEK_CUR), error_msg);
     
-    sprintf(error_msg, "It is not the last sector of %s", vhd_files[i]);
+    sprintf(error_msg, "It is not the last sector of %s (3)", vhd_files[i]);
     fail_unless(vinil_vhd_tell(vhd) == vhd->footer->current_size/512, error_msg);
     
     vinil_vhd_close(vhd);
