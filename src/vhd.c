@@ -226,7 +226,7 @@ long vinil_vhd_tell(VinilVHD* vhd) {
   return ftell(vhd->fd)/512;
 }
 
-int vinil_vhd_seek(VinilVHD* vhd, long offset, int origin) {
+int vinil_vhd_seek(VinilVHD* vhd, int64_t offset, int origin) {
   if (origin == SEEK_END) {
     int error = 0;
     int64_t size = 0 - sizeof(VinilVHDFooter) - offset*512;

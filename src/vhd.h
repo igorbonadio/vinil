@@ -199,7 +199,7 @@ VINILAPI long vinil_vhd_tell(VinilVHD* vhd);
  *  @return   On success, the function returns TRUE.
  *            If an error occurs, it returns FALSE.
  */
-VINILAPI int vinil_vhd_seek(VinilVHD* vhd, long offset, int origin);
+VINILAPI int vinil_vhd_seek(VinilVHD* vhd, int64_t offset, int origin);
 
 /** @brief  It is like fflush C function.
  *
