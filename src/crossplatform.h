@@ -20,6 +20,7 @@
 
 #ifdef _WIN32
   #include <windows.h>
+  #include <io.h>
 #else
   #include <uuid/uuid.h>
 #endif
