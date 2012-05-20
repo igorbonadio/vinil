@@ -250,6 +250,8 @@ int vinil_vhd_commit_structural_changes(VinilVHD* vhd) {
     return FALSE;
   }
   
+  vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
+  
   vinil_vhd_footer_byte_swap(vhd->footer);
   
   int b = fwrite(vhd->footer, 1, sizeof(VinilVHDFooter), vhd->fd);
