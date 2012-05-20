@@ -202,7 +202,7 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   vhd->footer->disk_type = 2;                                   // Fixed
   vinil_uuid_generate(&vhd->footer->uuid);
   vhd->footer->saved_state = 0;
-  vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
+  //vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
   
   fail_unless(vinil_vhd_commit_structural_changes(vhd), "Cannot commit changes in new_vhd_file.vhd");
   
@@ -230,7 +230,29 @@ START_TEST (test_vinil_vhd_commit_structural_changes) {
   // checking the new file...
   VinilVHD* vhd2 = vinil_vhd_open(vhd_path);
   fail_unless(vhd2 != NULL, "Cannot reopen new_vhd_file.vhd");
+  
+  // decreasing vhd's size
+  vhd2->footer->current_size = 2*1024*1024;                      // 2MB
+  
+  fail_unless(vinil_vhd_commit_structural_changes(vhd2), "Cannot commit changes in new_vhd_file.vhd");
+  
   vinil_vhd_close(vhd2);
+  
+  // checking the new file...
+  VinilVHD* vhd3 = vinil_vhd_open(vhd_path);
+  fail_unless(vhd3 != NULL, "Cannot reopen new_vhd_file.vhd");
+  
+  fail_unless(vinil_vhd_seek(vhd3, 0, SEEK_SET), "Cannot execute vinil_vhd_seek in new_vhd_file.vhd");
+  
+  count = 0;
+  while (vinil_vhd_write(vhd3, buffer, 1))
+    count++;
+  
+  fail_unless(count*512 == vhd->footer->current_size, "Wrong number of sectors in new_vhd_file.vhd");
+  
+  fail_unless(2*1024*1024 == vhd->footer->current_size, "Wrong number of sectors in new_vhd_file.vhd");
+  
+  vinil_vhd_close(vhd3);
   
 } END_TEST
 

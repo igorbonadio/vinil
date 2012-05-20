@@ -29,3 +29,11 @@ VINILAPI int64_t vinil_ftell(FILE *fd) {
   return ftello(fd);
 #endif
 }
+
+VINILAPI int vinil_truncate(FILE *fd, int64_t new_length) {
+#ifdef _WIN32
+  return _chsize(fileno(fd), new_length) == 0 ? TRUE : FALSE;
+#else
+  return ftruncate(fileno(fd), new_length) == 0 ? TRUE : FALSE;
+#endif
+}

@@ -34,5 +34,7 @@ typedef uuid_t vinil_uuid;
 VINILAPI void vinil_uuid_generate(vinil_uuid* uuid);
 VINILAPI int vinil_fseek(FILE *fd, int64_t offset, int origin);
 VINILAPI int64_t vinil_ftell(FILE *fd);
+VINILAPI int vinil_truncate(FILE *fd, int64_t new_length);
+
 
 #endif

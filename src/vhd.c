@@ -245,10 +245,12 @@ int vinil_vhd_flush(VinilVHD* vhd) {
 }
 
 int vinil_vhd_commit_structural_changes(VinilVHD* vhd) {
-  int error = vinil_fseek(vhd->fd, vhd->footer->current_size, SEEK_SET);
-  if (error) {
+  if (!vinil_truncate(vhd->fd, vhd->footer->current_size))
     return FALSE;
-  }
+  
+  int error = vinil_fseek(vhd->fd, vhd->footer->current_size, SEEK_SET);
+  if (error)
+    return FALSE;
   
   vhd->footer->checksum = vinil_checksum_vhd_footer(vhd->footer);
   
